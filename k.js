@@ -21,12 +21,18 @@ emailjs.init({
 });
 
 // GET APPROXIMATE LOGIN LOCATION
+
 function getLoginLocation() {
   return fetch("https://ipapi.co/json/")
     .then(function(response) {
+      if (!response.ok) {
+        throw new Error("IP API error: " + response.status);
+      }
       return response.json();
     })
     .then(function(data) {
+      console.log("LOCATION DATA:", data);
+
       return {
         city: data.city || "Unknown",
         region: data.region || "Unknown",
@@ -34,7 +40,8 @@ function getLoginLocation() {
       };
     })
     .catch(function(error) {
-      console.error("Location Error:", error);
+      console.error("LOCATION FETCH ERROR:", error);
+
       return {
         city: "Unavailable",
         region: "Unavailable",
@@ -42,6 +49,7 @@ function getLoginLocation() {
       };
     });
 }
+
 
 function sendLoginNotification(email, status, userName) {
 
