@@ -331,13 +331,44 @@ showRecords();
 
 // AUTO LOGIN AFTER REFRESH
 
+
 window.onload = function() {
 
- if(localStorage.getItem("currentUser")) {
-  openDashboard();
- }
+  auth.onAuthStateChanged(function(firebaseUser) {
+
+    if (firebaseUser) {
+
+      let user = JSON.parse(
+        localStorage.getItem("currentUser")
+      );
+
+      if (!user) {
+        user = {
+          email: firebaseUser.email,
+          loginDate: new Date().toLocaleString()
+        };
+
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(user)
+        );
+      }
+
+      openDashboard();
+
+    } else {
+
+      localStorage.removeItem("currentUser");
+
+      document.getElementById("dashboard").style.display = "none";
+      document.getElementById("loginPage").style.display = "block";
+
+    }
+
+  });
 
 };
+
 
 // LOGOUT
 
