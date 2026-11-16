@@ -447,86 +447,126 @@ async function deleteTool(index) {
 
 // BORROW TOOL
 
-function borrowTool(index) {
 
- if(tools[index].quantity <= 0) {
-  alert("Sorry! Tool is out of stock.");
-  return;
- }
+async function borrowTool(index) {
 
- let borrower = prompt("Enter the name of the borrower:");
+  let tool = tools[index];
 
- if(!borrower || !borrower.trim()) {
-  alert("Borrower's name is required!");
-  return;
- }
+  if (!tool) return;
 
- let quantity = Number(prompt(
-  "How many " + tools[index].name + " will be borrowed?"
- ));
+  let borrower = prompt("Enter the name of the borrower:");
 
- if(!Number.isInteger(quantity) ||
-    quantity < 1 ||
-    quantity > tools[index].quantity) {
+  if (!borrower || !borrower.trim()) {
+    alert("Borrower's name is required!");
+    return;
+  }
 
-  alert("Invalid quantity!");
-  return;
- }
+  let quantity = Number(prompt(
+    "How many " + tool.name + " will be borrowed?"
+  ));
 
- tools[index].quantity -= quantity;
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    alert("Invalid quantity!");
+    return;
+  }
 
- records.push({
-  borrower:borrower.trim(),
-  tool:tools[index].name,
-  quantity:quantity,
-  date:new Date().toLocaleString(),
-  status:"BORROWED",
-  returner:"-"
- });
+  try {
+    let toolRef = db.collection("tools").doc(tool.id);
 
- saveData();
- showTools();
- showRecords();
+    await db.runTransaction(async (transaction) => {
+      let doc = await transaction.get(toolRef);
 
- alert("Successfully borrowed!");
+      if (!doc.exists) {
+        throw new Error("Tool not found!");
+      }
 
+      let currentQuantity = Number(doc.data().quantity) || 0;
+
+      if (quantity > currentQuantity) {
+        throw new Error("Not enough stock! Available: " + currentQuantity);
+      }
+
+      transaction.update(toolRef, {
+        quantity: currentQuantity - quantity
+      });
+    });
+
+    records.push({
+      borrower: borrower.trim(),
+      tool: tool.name,
+      quantity: quantity,
+      date: new Date().toLocaleString(),
+      status: "BORROWED",
+      returner: "-"
+    });
+
+    saveData();
+    showRecords();
+
+    alert("Successfully borrowed!");
+
+  } catch (error) {
+    console.error("Borrow error:", error);
+    alert(error.message || "Unable to borrow tool.");
+  }
 }
+
 
 // RETURN TOOL
 
-function returnTool(index) {
 
- let record = records[index];
+async function returnTool(index) {
 
- if(record.status !== "BORROWED") return;
+  let record = records[index];
 
- let returner = prompt("Enter the name of the person returning the tool:");
+  if (!record || record.status !== "BORROWED") return;
 
- if(!returner || !returner.trim()) {
-  alert("Returner's name is required!");
-  return;
- }
+  let returner = prompt("Enter the name of the person returning the tool:");
 
- let tool = tools.find(t => t.name === record.tool);
+  if (!returner || !returner.trim()) {
+    alert("Returner's name is required!");
+    return;
+  }
 
- if(!tool) {
-  alert("Tool record not found.");
-  return;
- }
+  let tool = tools.find(t => t.name === record.tool);
 
- tool.quantity += record.quantity;
+  if (!tool) {
+    alert("Tool record not found.");
+    return;
+  }
 
- record.status = "RETURNED";
- record.returner = returner.trim();
- record.returnDate = new Date().toLocaleString();
+  try {
+    let toolRef = db.collection("tools").doc(tool.id);
 
- saveData();
- showTools();
- showRecords();
+    await db.runTransaction(async (transaction) => {
+      let doc = await transaction.get(toolRef);
 
- alert("Item successfully returned!");
+      if (!doc.exists) {
+        throw new Error("Tool not found in Firebase!");
+      }
 
+      let currentQuantity = Number(doc.data().quantity) || 0;
+
+      transaction.update(toolRef, {
+        quantity: currentQuantity + record.quantity
+      });
+    });
+
+    record.status = "RETURNED";
+    record.returner = returner.trim();
+    record.returnDate = new Date().toLocaleString();
+
+    saveData();
+    showRecords();
+
+    alert("Item successfully returned!");
+
+  } catch (error) {
+    console.error("Return error:", error);
+    alert(error.message || "Unable to return tool.");
+  }
 }
+
 
 // DISPLAY RECORDS
 
