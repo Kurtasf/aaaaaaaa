@@ -20,50 +20,32 @@ emailjs.init({
   publicKey: "_Hej9uDEINoUUd79P"
 });
 
-function sendLoginNotification(email, status) {
 
-// GET APPROXIMATE LOGIN LOCATION
-function getLoginLocation() {
-  return fetch("https://ipapi.co/json/")
+function sendLoginNotification(email, status, userName) {
+
+  getLoginLocation().then(function(location) {
+
+    emailjs.send(
+      "service_r18bmed",
+      "template_ku0tbwr",
+      {
+        user_name: userName || email.split("@")[0],
+        user_email: email,
+        login_date: new Date().toLocaleString(),
+        login_status: status,
+        login_city: location.city,
+        login_region: location.region,
+        login_country: location.country
+      }
+    )
     .then(function(response) {
-      return response.json();
-    })
-    .then(function(data) {
-      return {
-        city: data.city || "Unknown",
-        region: data.region || "Unknown",
-        country: data.country_name || "Unknown"
-      };
+      console.log("EMAIL SENT!", response.status);
     })
     .catch(function(error) {
-      console.error("Location Error:", error);
-      return {
-        city: "Unavailable",
-        region: "Unavailable",
-        country: "Unavailable"
-      };
+      console.error("EMAIL ERROR:", error);
     });
-}
 
-  emailjs.send(
-    "service_r18bmed",
-    "template_ku0tbwr",
-    {
-      user_name: email.split("@")[0],
-      user_email: email,
-      login_date: new Date().toLocaleString(),
-      login_status: status
-    }
-  )
-  .then(function(response) {
-    console.log("EMAIL SENT!", response.status);
-    alert("Email notification sent!");
-  })
-  .catch(function(error) {
-    console.error("EMAIL ERROR:", error);
-    alert("Email failed! Check Console.");
   });
-
 }
 
 // LOGIN
