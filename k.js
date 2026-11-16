@@ -86,3 +86,62 @@ function login() {
       message.innerText = "Invalid email or password!";
     });
 }
+
+
+// SHOW SIGN UP PAGE
+function showSignup() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("signupPage").style.display = "block";
+}
+
+// SHOW LOGIN PAGE
+function showLogin() {
+  document.getElementById("signupPage").style.display = "none";
+  document.getElementById("loginPage").style.display = "block";
+}
+
+// SIGN UP
+function signup() {
+  let name = document.getElementById("signupName").value.trim();
+  let email = document.getElementById("signupEmail").value.trim();
+  let password = document.getElementById("signupPassword").value;
+  let confirmPassword = document.getElementById("confirmPassword").value;
+
+  let message = document.getElementById("signupMessage");
+
+  if (!name || !email || !password || !confirmPassword) {
+    message.innerText = "Please complete all fields!";
+    return;
+  }
+
+  let strongPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
+
+  if (!strongPassword.test(password)) {
+    message.innerText =
+      "Password needs 8 characters, uppercase, lowercase, number, and special character!";
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    message.innerText = "Passwords do not match!";
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(function(userCredential) {
+
+      return userCredential.user.updateProfile({
+        displayName: name
+      });
+
+    })
+    .then(function() {
+      message.innerText = "Account created successfully!";
+    })
+    .catch(function(error) {
+      console.error("Sign Up Error:", error);
+      message.innerText = error.message;
+    });
+}
+
