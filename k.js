@@ -20,6 +20,28 @@ emailjs.init({
   publicKey: "_Hej9uDEINoUUd79P"
 });
 
+// GET APPROXIMATE LOGIN LOCATION
+function getLoginLocation() {
+  return fetch("https://ipapi.co/json/")
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      return {
+        city: data.city || "Unknown",
+        region: data.region || "Unknown",
+        country: data.country_name || "Unknown"
+      };
+    })
+    .catch(function(error) {
+      console.error("Location Error:", error);
+      return {
+        city: "Unavailable",
+        region: "Unavailable",
+        country: "Unavailable"
+      };
+    });
+}
 
 function sendLoginNotification(email, status, userName) {
 
@@ -81,7 +103,11 @@ function login() {
 
       localStorage.setItem("currentUser", JSON.stringify(user));
 
-      sendLoginNotification(email, "SUCCESSFUL");
+      sendLoginNotification(
+  email,
+  "SUCCESSFUL",
+  userCredential.user.displayName
+);
     })
     .catch(function(error) {
       console.error("Firebase Login Error:", error);
