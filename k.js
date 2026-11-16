@@ -47,22 +47,23 @@ function sendLoginNotification(email, status) {
 
 
 
+
 function login() {
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value;
-
-  let strongPassword =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
-
-if (!strongPassword.test(password)) {
-  document.getElementById("message").innerText =
-    "Password must have 8 characters, uppercase, lowercase, number, and special character!";
-  return;
-}
+  let message = document.getElementById("message");
 
   if (!email || !password) {
-    document.getElementById("message").innerText =
-      "Please enter your email and password!";
+    message.innerText = "Please enter your email and password!";
+    return;
+  }
+
+  let strongPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
+
+  if (!strongPassword.test(password)) {
+    message.innerText =
+      "Password must have 8 characters, uppercase, lowercase, number, and special character!";
     return;
   }
 
@@ -82,8 +83,6 @@ if (!strongPassword.test(password)) {
 
       sendLoginNotification(email, "FAILED");
 
-      document.getElementById("message").innerText =
-        "Invalid email or password!";
+      message.innerText = "Invalid email or password!";
     });
 }
-
