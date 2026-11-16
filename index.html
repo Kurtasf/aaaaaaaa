@@ -415,30 +415,33 @@ function startToolsSync() {
 
 // DELETE TOOL
 
-function deleteTool(index) {
 
- let tool = tools[index];
+async function deleteTool(index) {
 
- let hasBorrowed = records.some(record =>
-  record.tool === tool.name && record.status === "BORROWED"
- );
+  let tool = tools[index];
 
- if(hasBorrowed) {
-  alert("Cannot delete this tool because it still has active borrowings!");
-  return;
- }
+  let hasBorrowed = records.some(record =>
+    record.tool === tool.name && record.status === "BORROWED"
+  );
 
- if(!confirm("Are you sure you want to delete " + tool.name + "?")) {
-  return;
- }
+  if (hasBorrowed) {
+    alert("Cannot delete this tool because it still has active borrowings!");
+    return;
+  }
 
- tools.splice(index, 1);
+  if (!confirm("Are you sure you want to delete " + tool.name + "?")) {
+    return;
+  }
 
- saveData();
- showTools();
+  try {
+    await db.collection("tools").doc(tool.id).delete();
 
- alert("Tool successfully deleted!");
+    alert("Tool successfully deleted!");
 
+  } catch (error) {
+    console.error("Delete tool error:", error);
+    alert("Unable to delete tool. Please try again.");
+  }
 }
 
 
