@@ -51,6 +51,15 @@ function login() {
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value;
 
+  let strongPassword =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
+
+if (!strongPassword.test(password)) {
+  document.getElementById("message").innerText =
+    "Password must have 8 characters, uppercase, lowercase, number, and special character!";
+  return;
+}
+
   if (!email || !password) {
     document.getElementById("message").innerText =
       "Please enter your email and password!";
