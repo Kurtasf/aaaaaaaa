@@ -22,6 +22,29 @@ emailjs.init({
 
 function sendLoginNotification(email, status) {
 
+// GET APPROXIMATE LOGIN LOCATION
+function getLoginLocation() {
+  return fetch("https://ipapi.co/json/")
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      return {
+        city: data.city || "Unknown",
+        region: data.region || "Unknown",
+        country: data.country_name || "Unknown"
+      };
+    })
+    .catch(function(error) {
+      console.error("Location Error:", error);
+      return {
+        city: "Unavailable",
+        region: "Unavailable",
+        country: "Unavailable"
+      };
+    });
+}
+
   emailjs.send(
     "service_r18bmed",
     "template_ku0tbwr",
