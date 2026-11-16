@@ -374,15 +374,19 @@ window.onload = function() {
 
 function logout() {
 
- localStorage.removeItem("currentUser");
+  auth.signOut().then(function() {
 
- document.getElementById("dashboard").style.display="none";
- document.getElementById("loginPage").style.display="block";
+    localStorage.removeItem("currentUser");
 
- document.getElementById("email").value="";
- document.getElementById("password").value="";
- document.getElementById("otpInput").value="";
- document.getElementById("otpArea").style.display="none";
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("loginPage").style.display = "block";
+
+    document.getElementById("email").value = "";
+    document.getElementById("password").value = "";
+
+  }).catch(function(error) {
+    console.error("Logout error:", error);
+  });
 
 }
 
