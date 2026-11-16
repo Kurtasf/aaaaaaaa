@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <body>
+    
+    
+
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Borrowing System</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+header {
+  background: #ee4d2d;
+  color: white;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+nav {
+  background: white;
+  padding: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+nav input {
+  flex: 1;
+  min-width: 180px;
+}
+
+input, button {
+  padding: 11px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+button {
+  background: #ee4d2d;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #d83b20;
+}
+
+.container {
+  padding: 20px;
+}
+
+#loginPage {
+  max-width: 380px;
+  margin: 70px auto;
+  padding: 25px;
+  background: white;
+  text-align: center;
+  border-radius: 10px;
+}
+
+#loginPage input {
+  width: 100%;
+}
+
+#dashboard {
+  display: none;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(210px,1fr));
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px #ddd;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  background: #fafafa;
+}
+
+.card h3 {
+  color: #333;
+}
+
+.card p {
+  color: #666;
+}
+
+.section {
+  background: white;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background: #ee4d2d;
+  color: white;
+}
+
+.small {
+  font-size: 12px;
+  color: gray;
+}
+
+#message {
+  color: #ee4d2d;
+}
+
+@media(max-width:600px) {
+  table { font-size: 12px; }
+  th, td { padding: 7px; }
+}
+</style>
+
+
+
+
+<header>
+🔧 TOOL BORROWING SYSTEM
+</header>
+
+<!-- LOGIN PAGE -->
+
+<div id="loginPage">
+  <h2>Welcome!</h2>
+  <p>Login to your account</p>
+
+  <input id="email" placeholder="Email or Phone Number">
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="login()" style="width:100%">
+    LOGIN
+  </button>
+
+
+
+  <p id="message"></p>
+
+  <hr>
+  <p class="small">
+    HAPPY BORROW TOOLS<br>
+    HAPPY LOGIN<br>
+    HAPPY LANG
+  </p>
+</div>
+
+<!-- MAIN DASHBOARD -->
+
+<div id="dashboard">
+
+<nav>
+  <strong style="color:#ee4d2d">TOOL SHOP</strong>
+
+  <input id="search" placeholder="Search tools..." oninput="showTools()">
+
+  <button onclick="logout()">LOGOUT</button>
+</nav>
+
+<div class="container">
+
+<h2 id="welcome"></h2>
+
+<div class="section">
+  <h2>🔔 Login Notification</h2>
+  <p id="notification">Welcome to Tool Shop!</p>
+</div>
+
+<!-- TOOLS -->
+
+<div class="section">
+  <h2>🛠️ Available Tools</h2>
+  <div class="tools-grid" id="tools"></div>
+</div>
+
+<!-- ADD TOOLS -->
+
+<div class="section">
+  <h2>➕ Add New Tool</h2>
+
+  <input id="newName" placeholder="Tool Name">
+  <input id="newQuantity" type="number" min="1" placeholder="Quantity">
+
+  <p>Upload actual tool image:</p>
+  <input type="file" id="newImage" accept="image/*">
+
+  <br>
+  <button onclick="addTool()">ADD TOOL</button>
+</div>
+
+<!-- BORROWING RECORDS -->
+
+<div class="section">
+  <h2>📋 Borrowing and Returning Records</h2>
+
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th>Borrower</th>
+        <th>Tool</th>
+        <th>Quantity</th>
+        <th>Date Borrowed</th>
+        <th>Status</th>
+        <th>Returner</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody id="records"></tbody>
+  </table>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+
+
+// LOAD SAVED DATA
+
+let tools = JSON.parse(
+ localStorage.getItem("toolData")
+) || [
+ {
+  id:1,
+  name:"Electric Drill",
+  quantity:5,
+  image:"https://images.unsplash.com/photo-1504148455328-c376907d081c?w=500"
+ },
+ {
+  id:2,
+  name:"Claw Hammer",
+  quantity:10,
+  image:"https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=500"
+ },
+ {
+  id:3,
+  name:"Adjustable Wrench",
+  quantity:8,
+  image:"https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=500"
+ },
+ {
+  id:4,
+  name:"Angle Grinder",
+  quantity:4,
+  image:"https://images.unsplash.com/photo-1581147036324-c1c3f8e9b2b5?w=500"
+ }
+];
+
+let records = JSON.parse(
+ localStorage.getItem("borrowRecords")
+) || [];
+
+// SAVE ALL DATA
+
+function saveData() {
+ try {
+  localStorage.setItem("toolData",JSON.stringify(tools));
+  localStorage.setItem("borrowRecords",JSON.stringify(records));
+ } catch(error) {
+  alert("Storage is full. Try using smaller images.");
+ }
+}
+
+
+// OPEN DASHBOARD
+
+function openDashboard() {
+
+ let user = JSON.parse(
+  localStorage.getItem("currentUser")
+ );
+
+ if(!user) return;
+
+ document.getElementById("loginPage").style.display="none";
+ document.getElementById("dashboard").style.display="block";
+
+ document.getElementById("welcome").innerText =
+  "Welcome, " + user.email + "!";
+
+ document.getElementById("notification").innerText =
+  "A login was detected for " + user.email +
+  " at " + user.loginDate;
+
+startToolsSync();
+showRecords();
+}
+
+// AUTO LOGIN AFTER REFRESH
+
+window.onload = function() {
+
+ if(localStorage.getItem("currentUser")) {
+  openDashboard();
+ }
+
+};
+
+// LOGOUT
+
+function logout() {
+
+ localStorage.removeItem("currentUser");
+
+ document.getElementById("dashboard").style.display="none";
+ document.getElementById("loginPage").style.display="block";
+
+ document.getElementById("email").value="";
+ document.getElementById("password").value="";
+ document.getElementById("otpInput").value="";
+ document.getElementById("otpArea").style.display="none";
+
+}
+
+// DISPLAY TOOLS
+
+
+function showTools() {
+  let search = document.getElementById("search").value.toLowerCase();
+  let output = "";
+
+  tools.forEach((tool, index) => {
+    if (tool.name.toLowerCase().includes(search)) {
+      output += `
+        <div class="card">
+          <img src="${tool.image}" alt="Tool image"
+            onerror="this.src='https://placehold.co/300x200?text=Tool+Image'">
+
+          <h3>${safe(tool.name)}</h3>
+          <p>Available Stock: ${tool.quantity}</p>
+
+          <button onclick="borrowTool(${index})">BORROW ITEM</button>
+          <button onclick="changeImage(${index})">CHANGE IMAGE</button>
+          <button onclick="deleteTool(${index})" style="background:#dc2626">
+            DELETE TOOL
+          </button>
+        </div>
+      `;
+    }
+  });
+
+  document.getElementById("tools").innerHTML =
+    output || "No tools found.";
+}
+
+
+// REAL-TIME FIRESTORE TOOLS SYNC
+
+function startToolsSync() {
+  db.collection("tools").onSnapshot(
+    function(snapshot) {
+      tools = snapshot.docs.map(function(doc) {
+        let data = doc.data();
+
+        return {
+          id: doc.id,
+          name: data.name || "Unnamed Tool",
+          quantity: data.quantity ?? 0,
+          image: data.image ||
+            "https://placehold.co/300x200?text=Tool+Image"
+        };
+      });
+
+      showTools();
+    },
+    function(error) {
+      console.error("Tools sync error:", error);
+      alert("Unable to load tools from Firebase.");
+    }
+  );
+}
+
+// DELETE TOOL
+
+function deleteTool(index) {
+
+ let tool = tools[index];
+
+ let hasBorrowed = records.some(record =>
+  record.tool === tool.name && record.status === "BORROWED"
+ );
+
+ if(hasBorrowed) {
+  alert("Cannot delete this tool because it still has active borrowings!");
+  return;
+ }
+
+ if(!confirm("Are you sure you want to delete " + tool.name + "?")) {
+  return;
+ }
+
+ tools.splice(index, 1);
+
+ saveData();
+ showTools();
+
+ alert("Tool successfully deleted!");
+
+}
+
+
+// BORROW TOOL
+
+function borrowTool(index) {
+
+ if(tools[index].quantity <= 0) {
+  alert("Sorry! Tool is out of stock.");
+  return;
+ }
+
+ let borrower = prompt("Enter the name of the borrower:");
+
+ if(!borrower || !borrower.trim()) {
+  alert("Borrower's name is required!");
+  return;
+ }
+
+ let quantity = Number(prompt(
+  "How many " + tools[index].name + " will be borrowed?"
+ ));
+
+ if(!Number.isInteger(quantity) ||
+    quantity < 1 ||
+    quantity > tools[index].quantity) {
+
+  alert("Invalid quantity!");
+  return;
+ }
+
+ tools[index].quantity -= quantity;
+
+ records.push({
+  borrower:borrower.trim(),
+  tool:tools[index].name,
+  quantity:quantity,
+  date:new Date().toLocaleString(),
+  status:"BORROWED",
+  returner:"-"
+ });
+
+ saveData();
+ showTools();
+ showRecords();
+
+ alert("Successfully borrowed!");
+
+}
+
+// RETURN TOOL
+
+function returnTool(index) {
+
+ let record = records[index];
+
+ if(record.status !== "BORROWED") return;
+
+ let returner = prompt("Enter the name of the person returning the tool:");
+
+ if(!returner || !returner.trim()) {
+  alert("Returner's name is required!");
+  return;
+ }
+
+ let tool = tools.find(t => t.name === record.tool);
+
+ if(!tool) {
+  alert("Tool record not found.");
+  return;
+ }
+
+ tool.quantity += record.quantity;
+
+ record.status = "RETURNED";
+ record.returner = returner.trim();
+ record.returnDate = new Date().toLocaleString();
+
+ saveData();
+ showTools();
+ showRecords();
+
+ alert("Item successfully returned!");
+
+}
+
+// DISPLAY RECORDS
+
+function showRecords() {
+
+ let output = "";
+
+ records.forEach((record,index)=>{
+
+  output += `
+  <tr>
+   <td>${safe(record.borrower)}</td>
+   <td>${safe(record.tool)}</td>
+   <td>${record.quantity}</td>
+   <td>${safe(record.date)}</td>
+   <td>${record.status}</td>
+   <td>${safe(record.returner)}</td>
+   <td>
+    ${record.status === "BORROWED"
+     ? `<button onclick="returnTool(${index})">RETURN</button>`
+     : "✓ COMPLETED"}
+   </td>
+  </tr>
+  `;
+
+ });
+
+ document.getElementById("records").innerHTML =
+ output || "<tr><td colspan='7'>No records yet.</td></tr>";
+
+}
+
+// ADD NEW TOOL
+
+
+async function addTool() {
+  let name = document.getElementById("newName").value.trim();
+
+  let quantity = Number(
+    document.getElementById("newQuantity").value
+  );
+
+  let file = document.getElementById("newImage").files[0];
+
+  if (!name || !file ||
+      !Number.isInteger(quantity) || quantity < 1) {
+    alert("Please complete all fields and upload an image!");
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    alert("Please select a valid image!");
+    return;
+  }
+
+  try {
+    // Compress image to keep Firestore document small
+    let image = await new Promise((resolve, reject) => {
+      let reader = new FileReader();
+
+      reader.onload = function() {
+        let img = new Image();
+
+        img.onload = function() {
+          let canvas = document.createElement("canvas");
+          let scale = Math.min(1, 600 / Math.max(img.width, img.height));
+
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+
+          let ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          canvas.toBlob(function(blob) {
+            if (!blob || blob.size > 700 * 1024) {
+              reject(new Error("Image is too large. Choose a smaller image."));
+              return;
+            }
+
+            let imageReader = new FileReader();
+            imageReader.onload = () => resolve(imageReader.result);
+            imageReader.onerror = reject;
+            imageReader.readAsDataURL(blob);
+          }, "image/jpeg", 0.65);
+        };
+
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    await db.collection("tools").add({
+      name: name,
+      quantity: quantity,
+      image: image
+    });
+
+    document.getElementById("newName").value = "";
+    document.getElementById("newQuantity").value = "";
+    document.getElementById("newImage").value = "";
+
+    alert("Tool successfully saved to Firebase!");
+
+  } catch (error) {
+    console.error("Add tool error:", error);
+    alert("Unable to save tool: " + error.message);
+  }
+}
+
+
+// CHANGE TOOL IMAGE
+
+function changeImage(index) {
+
+ let upload = document.createElement("input");
+
+ upload.type = "file";
+ upload.accept = "image/*";
+
+ upload.onchange = function() {
+
+  let file = upload.files[0];
+
+  if(!file) return;
+
+if(!file.type.startsWith("image/")) {
+  alert("Please select a valid image!");
+  return;
+}
+
+  let reader = new FileReader();
+
+  reader.onload = function(e) {
+
+   tools[index].image = e.target.result;
+
+   saveData();
+   showTools();
+
+   alert("Tool image successfully changed!");
+
+  };
+
+  reader.readAsDataURL(file);
+
+ };
+
+ upload.click();
+
+}
+
+// ESCAPE USER INPUT IN HTML
+
+function safe(value) {
+ return String(value).replace(/[&<>"']/g, c => ({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
+}
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="k.js"></script>
+</body>
+</html>
