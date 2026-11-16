@@ -26,6 +26,7 @@ function sendLoginNotification(email, status) {
     "service_r18bmed",
     "template_ku0tbwr",
     {
+      user_name: "Kurt",
       user_email: email,
       login_date: new Date().toLocaleString(),
       login_status: status
