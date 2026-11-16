@@ -66,8 +66,6 @@ function login() {
       localStorage.setItem("currentUser", JSON.stringify(user));
 
       sendLoginNotification(email, "SUCCESSFUL");
-
-      openDashboard();
     })
     .catch(function(error) {
       console.error("Firebase Login Error:", error);
