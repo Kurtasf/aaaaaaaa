@@ -17,7 +17,7 @@ const db = firebase.firestore();
 console.log("Firebase connected successfully!");
 
 emailjs.init({
-  publicKey: "_Hej9uDEINoUUd79P"
+  publicKey: "9gKHyE7RdKUjDC-SW"
 });
 
 // GET APPROXIMATE LOGIN LOCATION
@@ -144,8 +144,8 @@ function sendLoginNotification(email, status, userName) {
   getLoginLocation().then(function(location) {
 
     emailjs.send(
-      "service_r18bmed",
-      "template_ku0tbwr",
+      "service_hd2xf9m",
+      "template_abw4dun",
       {
         user_name: userName || email.split("@")[0],
         user_email: email,
