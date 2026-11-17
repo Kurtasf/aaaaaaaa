@@ -75,6 +75,36 @@ function getLoginLocation() {
   });
 }
 
+// SEND LOGIN NOTIFICATION
+function sendLoginNotification(email, status, userName) {
+
+  getLoginLocation().then(function(location) {
+
+    emailjs.send(
+      "service_r18bmed",
+      "template_ku0tbwr",
+      {
+        user_name: userName || email.split("@")[0],
+        user_email: email,
+        login_date: new Date().toLocaleString(),
+        login_status: status,
+        login_city: location.city,
+        login_region: location.region,
+        login_country: location.country,
+        login_latitude: location.latitude,
+        login_longitude: location.longitude
+      }
+    )
+    .then(function(response) {
+      console.log("EMAIL SENT!", response.status);
+    })
+    .catch(function(error) {
+      console.error("EMAIL ERROR:", error);
+    });
+
+  });
+}
+
 
 // LOGIN
 
