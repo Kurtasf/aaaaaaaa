@@ -469,8 +469,11 @@ let stopToolsSync = null;
 function startToolsSync() {
 
   if (!auth.currentUser) {
-    console.log("Waiting for user login before syncing tools.");
-    return;
+  console.error("Tools sync blocked: User is not authenticated.");
+  return;
+}
+
+console.log("Authenticated UID:", auth.currentUser.uid);
   }
 
   stopToolsSync = db.collection("tools").onSnapshot(
