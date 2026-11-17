@@ -141,6 +141,8 @@ function showLogin() {
 }
 
 // SIGN UP
+
+// SIGN UP
 function signup() {
   let name = document.getElementById("signupName").value.trim();
   let email = document.getElementById("signupEmail").value.trim();
@@ -177,7 +179,18 @@ function signup() {
 
     })
     .then(function() {
-      message.innerText = "Account created successfully!";
+      return auth.signOut();
+    })
+    .then(function() {
+      document.getElementById("signupName").value = "";
+      document.getElementById("signupEmail").value = "";
+      document.getElementById("signupPassword").value = "";
+      document.getElementById("confirmPassword").value = "";
+
+      showLogin();
+
+      document.getElementById("message").innerText =
+        "Account created successfully! Please log in.";
     })
     .catch(function(error) {
       console.error("Sign Up Error:", error);
