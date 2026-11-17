@@ -19,14 +19,15 @@
 <style>
 * { box-sizing: border-box; }
 
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  background: #f4f8e8;
 }
 
 header {
-  background: #ee4d2d;
+  background: #2e7d32;
   color: white;
   padding: 20px;
   font-size: 24px;
@@ -34,7 +35,7 @@ header {
 }
 
 nav {
-  background: white;
+  background: #fff9c4;
   padding: 15px;
   display: flex;
   gap: 10px;
@@ -50,19 +51,31 @@ nav input {
 input, button {
   padding: 11px;
   margin: 5px 0;
-  border: 1px solid #ddd;
+  border: 1px solid #dce5c5;
   border-radius: 5px;
 }
 
 button {
-  background: green;
-  color: white;
+  background: #fbc02d;
+  color: #26351f;
   border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background: #d83b20;
+  background: #f9a825;
+}
+
+/* LOGIN AND SIGN UP BUTTONS */
+#loginPage button,
+#signupPage button {
+  background: #2e7d32;
+  color: white;
+}
+
+#loginPage button:hover,
+#signupPage button:hover {
+  background: #1b5e20;
 }
 
 .container {
@@ -76,6 +89,7 @@ button:hover {
   background: white;
   text-align: center;
   border-radius: 10px;
+  border: 1px solid #dce5c5;
 }
 
 #loginPage input {
@@ -96,18 +110,19 @@ button:hover {
   background: white;
   padding: 12px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px #ddd;
+  box-shadow: 0 2px 5px #dce5c5;
+  border-top: 4px solid #fbc02d;
 }
 
 .card img {
   width: 100%;
   height: 150px;
   object-fit: contain;
-  background: #fafafa;
+  background: #f9fbe7;
 }
 
 .card h3 {
-  color: #333;
+  color: #2e7d32;
 }
 
 .card p {
@@ -115,10 +130,11 @@ button:hover {
 }
 
 .section {
-  background: yellow;
+  background: white;
   margin-top: 20px;
   padding: 20px;
   border-radius: 10px;
+  border: 1px solid #e6edcf;
 }
 
 table {
@@ -134,7 +150,7 @@ th, td {
 }
 
 th {
-  background: #ee4d2d;
+  background: #2e7d32;
   color: white;
 }
 
@@ -144,13 +160,14 @@ th {
 }
 
 #message {
-  color: #ee4d2d;
+  color: #c62828;
 }
 
 @media(max-width:600px) {
   table { font-size: 12px; }
   th, td { padding: 7px; }
 }
+
 </style>
 
 
