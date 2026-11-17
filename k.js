@@ -213,11 +213,16 @@ function login() {
     .catch(function(error) {
       console.error("Firebase Login Error:", error);
 
-      sendLoginNotification(email, "FAILED");
-
-      message.innerText = "Invalid email or password!";
-    });
-}
+      emailjs.send(
+  "service_r18bmed",
+  "template_ku0tbwr",
+  {
+    user_name: email.split("@")[0],
+    user_email: email,
+    login_date: new Date().toLocaleString(),
+    login_status: "FAILED"
+  }
+);
 
 
 
