@@ -23,8 +23,8 @@ emailjs.init({
 // GET APPROXIMATE LOGIN LOCATION
           
 // GET PRECISE DEVICE LOCATION + ADDRESS
-function getLoginLocation() {
 
+function getLoginLocation() {
   return new Promise(function(resolve) {
 
     if (!navigator.geolocation) {
@@ -42,78 +42,56 @@ function getLoginLocation() {
     }
 
     navigator.geolocation.getCurrentPosition(
-
       function(position) {
 
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
 
         fetch(
-          "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" +
-          
-fetch(
-  "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
-  latitude + "&lon=" + longitude + "&addressdetails=1"
-)
-.then(function(response) {
-  if (!response.ok) {
-    throw new Error("Geocoding failed");
-  }
-  return response.json();
-})
-.then(function(data) {
+          "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+          latitude + "&lon=" + longitude + "&addressdetails=1"
+        )
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error("Geocoding failed");
+          }
+          return response.json();
+        })
+        .then(function(data) {
 
-  let address = data.address || {};
+          let address = data.address || {};
 
-  resolve({
-    street: [
-      address.house_number,
-      address.road
-    ].filter(Boolean).join(" ") || "Unavailable",
+          resolve({
+            street: [
+              address.house_number,
+              address.road
+            ].filter(Boolean).join(" ") || "Unavailable",
 
-    barangay:
-      address.suburb ||
-      address.neighbourhood ||
-      address.quarter ||
-      address.village ||
-      "Unavailable",
+            barangay:
+              address.suburb ||
+              address.neighbourhood ||
+              address.quarter ||
+              address.village ||
+              "Unavailable",
 
-    city:
-      address.city ||
-      address.town ||
-      address.municipality ||
-      "Unavailable",
+            city:
+              address.city ||
+              address.town ||
+              address.municipality ||
+              "Unavailable",
 
-    region:
-      address.state ||
-      address.province ||
-      "Unavailable",
+            region:
+              address.state ||
+              address.province ||
+              "Unavailable",
 
-    country: address.country || "Unavailable",
+            country: address.country || "Unavailable",
+            latitude: latitude,
+            longitude: longitude,
+            accuracy: Math.round(position.coords.accuracy)
+          });
 
-    latitude: latitude,
-    longitude: longitude,
-    accuracy: Math.round(position.coords.accuracy)
-  });
-
-})
-.catch(function(error) {
-
-  console.error("ADDRESS ERROR:", error);
-
-  resolve({
-    street: "Unavailable",
-    barangay: "Unavailable",
-    city: "Unavailable",
-    region: "Unavailable",
-    country: "Unavailable",
-    latitude: latitude,
-    longitude: longitude,
-    accuracy: Math.round(position.coords.accuracy)
-  });
-
-});
-
+        })
         .catch(function(error) {
 
           console.error("ADDRESS ERROR:", error);
@@ -155,9 +133,7 @@ fetch(
         timeout: 30000,
         maximumAge: 0
       }
-
     );
-
   });
 }
 
