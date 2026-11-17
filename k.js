@@ -156,8 +156,6 @@ function showLogin() {
 }
 
 // SIGN UP
-
-// SIGN UP
 function signup() {
   let name = document.getElementById("signupName").value.trim();
   let email = document.getElementById("signupEmail").value.trim();
@@ -213,3 +211,22 @@ function signup() {
     });
 }
 
+// CHECK FIREBASE LOGIN SESSION
+
+auth.onAuthStateChanged(function(firebaseUser) {
+
+  if (firebaseUser) {
+
+    if (localStorage.getItem("currentUser")) {
+      openDashboard();
+    }
+
+  } else {
+
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("signupPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "block";
+
+  }
+
+});
