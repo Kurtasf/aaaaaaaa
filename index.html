@@ -465,16 +465,17 @@ function showTools() {
 
 // REAL-TIME FIRESTORE TOOLS SYNC
 
+
 let stopToolsSync = null;
+
 function startToolsSync() {
 
   if (!auth.currentUser) {
-  console.error("Tools sync blocked: User is not authenticated.");
-  return;
-}
-
-console.log("Authenticated UID:", auth.currentUser.uid);
+    console.error("Tools sync blocked: User is not authenticated.");
+    return;
   }
+
+  console.log("Authenticated UID:", auth.currentUser.uid);
 
   stopToolsSync = db.collection("tools").onSnapshot(
     function(snapshot) {
@@ -498,6 +499,7 @@ console.log("Authenticated UID:", auth.currentUser.uid);
     }
   );
 }
+
 
 // DELETE TOOL
 
