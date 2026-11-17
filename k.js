@@ -23,34 +23,12 @@ emailjs.init({
 // GET APPROXIMATE LOGIN LOCATION
 
 function getLoginLocation() {
-  console.log("GET LOCATION FUNCTION STARTED!");
-  return fetch("https://ipapi.co/json/")
-    .then(function(response) {
-      if (!response.ok) {
-        throw new Error("IP API error: " + response.status);
-      }
-      return response.json();
-    })
-    .then(function(data) {
-      console.log("LOCATION DATA:", data);
-
-      return {
-        city: data.city || "Unknown",
-        region: data.region || "Unknown",
-        country: data.country_name || "Unknown"
-      };
-    })
-    .catch(function(error) {
-      console.error("LOCATION FETCH ERROR:", error);
-
-      return {
-        city: "Unavailable",
-        region: "Unavailable",
-        country: "Unavailable"
-      };
-    });
+  return Promise.resolve({
+    city: "Unavailable",
+    region: "Unavailable",
+    country: "Unavailable"
+  });
 }
-
 
 function sendLoginNotification(email, status, userName) {
 
