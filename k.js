@@ -21,41 +21,6 @@ emailjs.init({
 });
 
 // GET APPROXIMATE LOGIN LOCATION
-
-
-// GET DEVICE LOCATION
-function getLoginLocation() {
-
-  return new Promise(function(resolve) {
-
-    if (!navigator.geolocation) {
-      resolve({
-        city: "Unavailable",
-        region: "Unavailable",
-        country: "Unavailable",
-        latitude: "Unavailable",
-        longitude: "Unavailable"
-      });
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-
-        resolve({
-          city: "GPS Location",
-          region: "GPS Location",
-          country: "Philippines",
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-
-      },
-
-      function(error) {
-        console.error("LOCATION ERROR:", error.message);
-
-        resolve({
           
 // GET PRECISE DEVICE LOCATION + ADDRESS
 function getLoginLocation() {
