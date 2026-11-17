@@ -401,7 +401,10 @@ window.onload = function() {
 
 
 function logout() {
-
+   if (stopToolsSync) {
+  stopToolsSync();
+  stopToolsSync = null;
+}
   auth.signOut().then(function() {
 
     localStorage.removeItem("currentUser");
