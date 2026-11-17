@@ -451,7 +451,14 @@ function showTools() {
 
 // REAL-TIME FIRESTORE TOOLS SYNC
 
+
 function startToolsSync() {
+
+  if (!auth.currentUser) {
+    console.log("Waiting for user login before syncing tools.");
+    return;
+  }
+
   db.collection("tools").onSnapshot(
     function(snapshot) {
       tools = snapshot.docs.map(function(doc) {
