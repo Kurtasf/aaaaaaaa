@@ -180,6 +180,7 @@ function sendLoginNotification(email, status, userName) {
 
 
 
+
 function login() {
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value;
@@ -201,6 +202,7 @@ function login() {
 
   auth.signInWithEmailAndPassword(email, password)
     .then(function(userCredential) {
+
       let firebaseUser = userCredential.user;
 
       let user = {
@@ -210,14 +212,10 @@ function login() {
 
       localStorage.setItem("currentUser", JSON.stringify(user));
 
-      // HIDE LOGIN AND SIGNUP
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("signupPage").style.display = "none";
-
-      // SHOW DASHBOARD
       document.getElementById("dashboard").style.display = "block";
- 
-      // UPDATE WELCOME MESSAGE
+
       document.getElementById("welcome").innerText =
         "Welcome, " + (firebaseUser.displayName || firebaseUser.email) + "!";
 
@@ -226,22 +224,27 @@ function login() {
         "SUCCESSFUL",
         firebaseUser.displayName
       );
+
     })
     .catch(function(error) {
+
       console.error("Firebase Login Error:", error);
 
       emailjs.send(
-  "service_r18bmed",
-  "template_ku0tbwr",
-  {
-    user_name: email.split("@")[0],
-    user_email: email,
-    login_date: new Date().toLocaleString(),
-    login_status: "FAILED"
-  }
-);
+        "service_r18bmed",
+        "template_ku0tbwr",
+        {
+          user_name: email.split("@")[0],
+          user_email: email,
+          login_date: new Date().toLocaleString(),
+          login_status: "FAILED"
+        }
+      );
 
+      message.innerText = "Invalid email or password!";
 
+    });
+}
 
 // SHOW SIGN UP PAGE
 function showSignup() {
