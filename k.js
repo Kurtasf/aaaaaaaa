@@ -22,40 +22,59 @@ emailjs.init({
 
 // GET APPROXIMATE LOGIN LOCATION
 
+
+// GET DEVICE LOCATION
 function getLoginLocation() {
-  return Promise.resolve({
-    city: "Unavailable",
-    region: "Unavailable",
-    country: "Unavailable"
-  });
-}
 
-function sendLoginNotification(email, status, userName) {
+  return new Promise(function(resolve) {
 
-  getLoginLocation().then(function(location) {
+    if (!navigator.geolocation) {
+      resolve({
+        city: "Unavailable",
+        region: "Unavailable",
+        country: "Unavailable",
+        latitude: "Unavailable",
+        longitude: "Unavailable"
+      });
+      return;
+    }
 
-    emailjs.send(
-      "service_r18bmed",
-      "template_ku0tbwr",
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+
+        resolve({
+          city: "GPS Location",
+          region: "GPS Location",
+          country: "Philippines",
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+
+      },
+
+      function(error) {
+        console.error("LOCATION ERROR:", error.message);
+
+        resolve({
+          city: "Permission denied or unavailable",
+          region: "Unavailable",
+          country: "Unavailable",
+          latitude: "Unavailable",
+          longitude: "Unavailable"
+        });
+      },
+
       {
-        user_name: userName || email.split("@")[0],
-        user_email: email,
-        login_date: new Date().toLocaleString(),
-        login_status: status,
-        login_city: location.city,
-        login_region: location.region,
-        login_country: location.country
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
       }
-    )
-    .then(function(response) {
-      console.log("EMAIL SENT!", response.status);
-    })
-    .catch(function(error) {
-      console.error("EMAIL ERROR:", error);
-    });
+
+    );
 
   });
 }
+
 
 // LOGIN
 
