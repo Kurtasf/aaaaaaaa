@@ -462,7 +462,7 @@ function showTools() {
 
 // REAL-TIME FIRESTORE TOOLS SYNC
 
-
+let stopToolsSync = null;
 function startToolsSync() {
 
   if (!auth.currentUser) {
