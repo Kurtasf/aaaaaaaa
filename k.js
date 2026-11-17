@@ -23,6 +23,7 @@ emailjs.init({
 // GET APPROXIMATE LOGIN LOCATION
 
 function getLoginLocation() {
+  console.log("GET LOCATION FUNCTION STARTED!");
   return fetch("https://ipapi.co/json/")
     .then(function(response) {
       if (!response.ok) {
