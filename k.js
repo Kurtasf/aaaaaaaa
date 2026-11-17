@@ -50,29 +50,70 @@ function getLoginLocation() {
 
         fetch(
           "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" +
-          latitude + "&longitude=" + longitude +
-          "&localityLanguage=en"
-        )
-        .then(function(response) {
-          if (!response.ok) {
-            throw new Error("Geocoding failed");
-          }
-          return response.json();
-        })
-        .then(function(data) {
+          
+fetch(
+  "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+  latitude + "&lon=" + longitude + "&addressdetails=1"
+)
+.then(function(response) {
+  if (!response.ok) {
+    throw new Error("Geocoding failed");
+  }
+  return response.json();
+})
+.then(function(data) {
 
-          resolve({
-            street: "Not available",
-            barangay: data.locality || "Unavailable",
-            city: data.city || "Unavailable",
-            region: data.principalSubdivision || "Unavailable",
-            country: data.countryName || "Unavailable",
-            latitude: latitude,
-            longitude: longitude,
-            accuracy: Math.round(position.coords.accuracy)
-          });
+  let address = data.address || {};
 
-        })
+  resolve({
+    street: [
+      address.house_number,
+      address.road
+    ].filter(Boolean).join(" ") || "Unavailable",
+
+    barangay:
+      address.suburb ||
+      address.neighbourhood ||
+      address.quarter ||
+      address.village ||
+      "Unavailable",
+
+    city:
+      address.city ||
+      address.town ||
+      address.municipality ||
+      "Unavailable",
+
+    region:
+      address.state ||
+      address.province ||
+      "Unavailable",
+
+    country: address.country || "Unavailable",
+
+    latitude: latitude,
+    longitude: longitude,
+    accuracy: Math.round(position.coords.accuracy)
+  });
+
+})
+.catch(function(error) {
+
+  console.error("ADDRESS ERROR:", error);
+
+  resolve({
+    street: "Unavailable",
+    barangay: "Unavailable",
+    city: "Unavailable",
+    region: "Unavailable",
+    country: "Unavailable",
+    latitude: latitude,
+    longitude: longitude,
+    accuracy: Math.round(position.coords.accuracy)
+  });
+
+});
+
         .catch(function(error) {
 
           console.error("ADDRESS ERROR:", error);
