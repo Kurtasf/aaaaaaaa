@@ -121,7 +121,8 @@ function login() {
 
       // SHOW DASHBOARD
       document.getElementById("dashboard").style.display = "block";
-
+      startToolsSync();
+      showRecords();
       // UPDATE WELCOME MESSAGE
       document.getElementById("welcome").innerText =
         "Welcome, " + (firebaseUser.displayName || firebaseUser.email) + "!";
