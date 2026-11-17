@@ -56,17 +56,97 @@ function getLoginLocation() {
         console.error("LOCATION ERROR:", error.message);
 
         resolve({
-          city: "Permission denied or unavailable",
+          
+// GET PRECISE DEVICE LOCATION + ADDRESS
+function getLoginLocation() {
+
+  return new Promise(function(resolve) {
+
+    if (!navigator.geolocation) {
+      resolve({
+        street: "Unavailable",
+        barangay: "Unavailable",
+        city: "Unavailable",
+        region: "Unavailable",
+        country: "Unavailable",
+        latitude: "Unavailable",
+        longitude: "Unavailable",
+        accuracy: "Unavailable"
+      });
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+      function(position) {
+
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+
+        fetch(
+          "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" +
+          latitude + "&longitude=" + longitude +
+          "&localityLanguage=en"
+        )
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error("Geocoding failed");
+          }
+          return response.json();
+        })
+        .then(function(data) {
+
+          resolve({
+            street: "Not available",
+            barangay: data.locality || "Unavailable",
+            city: data.city || "Unavailable",
+            region: data.principalSubdivision || "Unavailable",
+            country: data.countryName || "Unavailable",
+            latitude: latitude,
+            longitude: longitude,
+            accuracy: Math.round(position.coords.accuracy)
+          });
+
+        })
+        .catch(function(error) {
+
+          console.error("ADDRESS ERROR:", error);
+
+          resolve({
+            street: "Unavailable",
+            barangay: "Unavailable",
+            city: "Unavailable",
+            region: "Unavailable",
+            country: "Unavailable",
+            latitude: latitude,
+            longitude: longitude,
+            accuracy: Math.round(position.coords.accuracy)
+          });
+
+        });
+
+      },
+
+      function(error) {
+
+        console.error("GPS ERROR:", error.message);
+
+        resolve({
+          street: "Permission denied or unavailable",
+          barangay: "Unavailable",
+          city: "Unavailable",
           region: "Unavailable",
           country: "Unavailable",
           latitude: "Unavailable",
-          longitude: "Unavailable"
+          longitude: "Unavailable",
+          accuracy: "Unavailable"
         });
+
       },
 
       {
         enableHighAccuracy: true,
-        timeout: 15000,
+        timeout: 30000,
         maximumAge: 0
       }
 
@@ -76,6 +156,7 @@ function getLoginLocation() {
 }
 
 // SEND LOGIN NOTIFICATION
+
 function sendLoginNotification(email, status, userName) {
 
   getLoginLocation().then(function(location) {
@@ -88,11 +169,16 @@ function sendLoginNotification(email, status, userName) {
         user_email: email,
         login_date: new Date().toLocaleString(),
         login_status: status,
+
+        login_street: location.street,
+        login_barangay: location.barangay,
         login_city: location.city,
         login_region: location.region,
         login_country: location.country,
+
         login_latitude: location.latitude,
-        login_longitude: location.longitude
+        login_longitude: location.longitude,
+        login_accuracy: location.accuracy
       }
     )
     .then(function(response) {
