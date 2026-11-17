@@ -399,23 +399,34 @@ window.onload = function() {
 
 // LOGOUT
 
+
 function logout() {
 
   auth.signOut().then(function() {
 
     localStorage.removeItem("currentUser");
 
+    // HIDE DASHBOARD AND SIGNUP
     document.getElementById("dashboard").style.display = "none";
+    document.getElementById("signupPage").style.display = "none";
+
+    // SHOW LOGIN
     document.getElementById("loginPage").style.display = "block";
 
+    // CLEAR LOGIN FIELDS
     document.getElementById("email").value = "";
     document.getElementById("password").value = "";
+
+    // CLEAR TOOLS DISPLAY
+    tools = [];
+    showTools();
 
   }).catch(function(error) {
     console.error("Logout error:", error);
   });
 
 }
+
 
 // DISPLAY TOOLS
 
