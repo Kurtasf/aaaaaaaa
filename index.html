@@ -470,7 +470,7 @@ function startToolsSync() {
     return;
   }
 
-  db.collection("tools").onSnapshot(
+  stopToolsSync = db.collection("tools").onSnapshot(
     function(snapshot) {
       tools = snapshot.docs.map(function(doc) {
         let data = doc.data();
