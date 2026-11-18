@@ -265,6 +265,33 @@ th {
     <button onclick="showAdminAccounts()">
       MANAGE ACCOUNTS
     </button>
+  </div>
+
+  <!-- MANAGE ACCOUNTS SECTION -->
+  <div id="adminAccountsSection" style="display:none;" class="section">
+
+    <h2>MANAGE ACCOUNTS</h2>
+
+    <button onclick="loadAdminAccounts()">REFRESH ACCOUNTS</button>
+
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Display Name</th>
+            <th>Verified</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="adminAccountsList">
+          <tr>
+            <td colspan="4">Click Manage Accounts to load accounts.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
 
