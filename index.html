@@ -379,6 +379,18 @@ function openDashboard() {
   );
 
   if (!user) return;
+  
+// CHECK ADMIN ACCOUNT
+const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+const adminPanel = document.getElementById("adminPanel");
+
+if (auth.currentUser && auth.currentUser.uid === adminUID) {
+  adminPanel.style.display = "block";
+} else {
+  adminPanel.style.display = "none";
+}
+
 
   document.getElementById("loginPage").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
