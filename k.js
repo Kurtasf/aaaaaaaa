@@ -138,6 +138,7 @@ function getLoginLocation() {
   });
 }
 
+
 // SEND LOGIN NOTIFICATION
 
 function sendLoginNotification(email, status, userName) {
@@ -146,35 +147,39 @@ function sendLoginNotification(email, status, userName) {
 
     if (EMAIL_NOTIFICATIONS_ENABLED) {
 
-  emailjs.send(
-    "",
-    "",
-    {
-      user_name: userName || email.split("@")[0],
-      user_email: email,
-      login_date: new Date().toLocaleString(),
-      login_status: status,
+      emailjs.send(
+        "",
+        "",
+        {
+          user_name: userName || email.split("@")[0],
+          user_email: email,
+          login_date: new Date().toLocaleString(),
+          login_status: status,
 
-      login_street: location.street,
-      login_barangay: location.barangay,
-      login_city: location.city,
-      login_region: location.region,
-      login_country: location.country,
+          login_street: location.street,
+          login_barangay: location.barangay,
+          login_city: location.city,
+          login_region: location.region,
+          login_country: location.country,
 
-      login_latitude: location.latitude,
-      login_longitude: location.longitude,
-      login_accuracy: location.accuracy
+          login_latitude: location.latitude,
+          login_longitude: location.longitude,
+          login_accuracy: location.accuracy
+        }
+      )
+      .then(function(response) {
+        console.log("EMAIL SENT!", response.status);
+      })
+      .catch(function(error) {
+        console.error("EMAIL ERROR:", error);
+      });
+
+    } else {
+      console.log("EMAIL NOTIFICATIONS DISABLED");
     }
-  )
-  .then(function(response) {
-    console.log("EMAIL SENT!", response.status);
-  })
-  .catch(function(error) {
-    console.error("EMAIL ERROR:", error);
+
   });
 
-} else {
-  console.log("EMAIL NOTIFICATIONS DISABLED");
 }
 
 
