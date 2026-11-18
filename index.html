@@ -712,7 +712,25 @@ async function returnTool(index) {
 
 // DISPLAY RECORDS
 async function showAdminHistory() {
+  function showAdminTools() {
 
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+  if (!auth.currentUser || auth.currentUser.uid !== adminUID) {
+    alert("Access denied! Admin only.");
+    return;
+  }
+
+  const addToolSection = document.getElementById("addToolSection");
+
+  addToolSection.style.display = "block";
+
+  addToolSection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
   const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
 
   if (!auth.currentUser || auth.currentUser.uid !== adminUID) {
