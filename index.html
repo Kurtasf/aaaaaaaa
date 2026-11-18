@@ -446,10 +446,13 @@ function logout() {
 
 // DISPLAY TOOLS
 
-
 function showTools() {
   let search = document.getElementById("search").value.toLowerCase();
   let output = "";
+
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+  const isAdmin = auth.currentUser &&
+                  auth.currentUser.uid === adminUID;
 
   tools.forEach((tool, index) => {
     if (tool.name.toLowerCase().includes(search)) {
@@ -462,10 +465,14 @@ function showTools() {
           <p>Available Stock: ${tool.quantity}</p>
 
           <button onclick="borrowTool(${index})">BORROW ITEM</button>
-          <button onclick="changeImage(${index})">CHANGE IMAGE</button>
-          <button onclick="deleteTool(${index})" style="background:#dc2626">
-            DELETE TOOL
-          </button>
+
+          ${isAdmin ? `
+            <button onclick="changeImage(${index})">CHANGE IMAGE</button>
+
+            <button onclick="deleteTool(${index})" style="background:#dc2626">
+              DELETE TOOL
+            </button>
+          ` : ""}
         </div>
       `;
     }
