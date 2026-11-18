@@ -618,17 +618,18 @@ async function borrowTool(index) {
 // RETURN TOOL
 
 
+
 async function returnTool(index) {
 
-  record.status = "RETURNED";
-record.returner = returner.trim();
+  let record = records[index];
 
-record.returnDate = new Date().toLocaleString();
+  if (!record || record.status !== "BORROWED") return;
 
-saveData();
-showRecords();
+  let returner = prompt("Enter the name of the person returning the tool:");
 
-alert("Item successfully returned!");
+  if (!returner || !returner.trim()) {
+    alert("Returner's name is required!");
+    return;
   }
 
   let tool = tools.find(t => t.name === record.tool);
