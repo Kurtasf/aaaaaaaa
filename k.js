@@ -1,3 +1,4 @@
+const EMAIL_NOTIFICATIONS_ENABLED = true;
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
   apiKey: "AIzaSyDUnnPmQuaxNsLMCsojkuR97elIlx8gu78",
