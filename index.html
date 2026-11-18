@@ -805,11 +805,10 @@ async function loadAdminAccounts() {
       }
     );
 
-    const result = await response.json();
+   const result = await response.json();
 
-   if (!response.ok) {
-  console.error("Firebase token verification failed:", response.status, await response.text());
-  return false;
+if (!response.ok) {
+  throw new Error(result.error || "Unable to load accounts.");
 }
 
     if (!result.users || result.users.length === 0) {
