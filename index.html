@@ -674,9 +674,8 @@ async function returnTool(index) {
 
 // DISPLAY RECORDS
 
-function showRecords() {
 
- function showRecords() {
+function showRecords() {
 
   let output = "";
 
@@ -696,6 +695,7 @@ function showRecords() {
         </td>
 
         <td>${safe(record.status)}</td>
+
         <td>${safe(record.returner || "-")}</td>
 
         <td>
@@ -705,11 +705,14 @@ function showRecords() {
         </td>
       </tr>
     `;
+
   });
 
   document.getElementById("records").innerHTML =
     output || "<tr><td colspan='8'>No records yet.</td></tr>";
+
 }
+
 
 // ADD NEW TOOL
 
