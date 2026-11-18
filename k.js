@@ -1,3 +1,4 @@
+const EMAIL_NOTIFICATIONS_ENABLED = false;
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
   apiKey: "AIzaSyDUnnPmQuaxNsLMCsojkuR97elIlx8gu78",
@@ -143,34 +144,37 @@ function sendLoginNotification(email, status, userName) {
 
   getLoginLocation().then(function(location) {
 
-    emailjs.send(
-      "",
-      "",
-      {
-        user_name: userName || email.split("@")[0],
-        user_email: email,
-        login_date: new Date().toLocaleString(),
-        login_status: status,
+    if (EMAIL_NOTIFICATIONS_ENABLED) {
 
-        login_street: location.street,
-        login_barangay: location.barangay,
-        login_city: location.city,
-        login_region: location.region,
-        login_country: location.country,
+  emailjs.send(
+    "",
+    "",
+    {
+      user_name: userName || email.split("@")[0],
+      user_email: email,
+      login_date: new Date().toLocaleString(),
+      login_status: status,
 
-        login_latitude: location.latitude,
-        login_longitude: location.longitude,
-        login_accuracy: location.accuracy
-      }
-    )
-    .then(function(response) {
-      console.log("EMAIL SENT!", response.status);
-    })
-    .catch(function(error) {
-      console.error("EMAIL ERROR:", error);
-    });
+      login_street: location.street,
+      login_barangay: location.barangay,
+      login_city: location.city,
+      login_region: location.region,
+      login_country: location.country,
 
+      login_latitude: location.latitude,
+      login_longitude: location.longitude,
+      login_accuracy: location.accuracy
+    }
+  )
+  .then(function(response) {
+    console.log("EMAIL SENT!", response.status);
+  })
+  .catch(function(error) {
+    console.error("EMAIL ERROR:", error);
   });
+
+} else {
+  console.log("EMAIL NOTIFICATIONS DISABLED");
 }
 
 
