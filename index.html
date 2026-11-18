@@ -686,6 +686,37 @@ async function returnTool(index) {
 // DISPLAY RECORDS
 
 
+async function loadRecords() {
+
+  if (!auth.currentUser) return;
+
+  try {
+
+    const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+    let snapshot;
+
+    if (auth.currentUser.uid === adminUID) {
+      snapshot = await db.collection("borrowRecords").get();
+    } else {
+      snapshot = await db.collection("borrowRecords")
+        .where("borrowerUid", "==", auth.currentUser.uid)
+        .get();
+    }
+
+    records = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    showRecords();
+
+  } catch (error) {
+    console.error("Load records error:", error);
+    alert("Unable to load borrowing history.");
+  }
+}
+
 function showRecords() {
 
   let output = "";
