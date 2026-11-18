@@ -1,4 +1,3 @@
-const EMAIL_NOTIFICATIONS_ENABLED = false;
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
   apiKey: "AIzaSyDUnnPmQuaxNsLMCsojkuR97elIlx8gu78",
@@ -18,7 +17,7 @@ const db = firebase.firestore();
 console.log("Firebase connected successfully!");
 
 emailjs.init({
-  publicKey: ""
+  publicKey: "9KwjD21pGkLO_khgl"
 });
 
 // GET APPROXIMATE LOGIN LOCATION
@@ -148,8 +147,8 @@ function sendLoginNotification(email, status, userName) {
     if (EMAIL_NOTIFICATIONS_ENABLED) {
 
       emailjs.send(
-        "",
-        "",
+        "service_vpjxt1a",
+        "template_a4ivrwi",
         {
           user_name: userName || email.split("@")[0],
           user_email: email,
@@ -240,8 +239,8 @@ function login() {
       console.error("Firebase Login Error:", error);
 
       emailjs.send(
-        "",
-        "",
+        "service_vpjxt1a",
+        "template_a4ivrwi",
         {
           user_name: email.split("@")[0],
           user_email: email,
