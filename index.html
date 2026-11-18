@@ -817,41 +817,55 @@ async function addTool() {
 
 function changeImage(index) {
 
- let upload = document.createElement("input");
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
 
- upload.type = "file";
- upload.accept = "image/*";
+  if (!auth.currentUser || auth.currentUser.uid !== adminUID) {
+    alert("Access denied! Admin only.");
+    return;
+  }
 
- upload.onchange = function() {
+  let upload = document.createElement("input");
 
-  let file = upload.files[0];
+  upload.type = "file";
+  upload.accept = "image/*";
 
-  if(!file) return;
+  upload.onchange = async function() {
 
-if(!file.type.startsWith("image/")) {
-  alert("Please select a valid image!");
-  return;
-}
+    let file = upload.files[0];
 
-  let reader = new FileReader();
+    if (!file) return;
 
-  reader.onload = function(e) {
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image!");
+      return;
+    }
 
-   tools[index].image = e.target.result;
+    try {
+      let reader = new FileReader();
 
-   saveData();
-   showTools();
+      reader.onload = async function(e) {
+        try {
+          await db.collection("tools").doc(tools[index].id).update({
+            image: e.target.result
+          });
 
-   alert("Tool image successfully changed!");
+          alert("Tool image successfully changed!");
 
+        } catch (error) {
+          console.error("Change image error:", error);
+          alert("Unable to change tool image.");
+        }
+      };
+
+      reader.readAsDataURL(file);
+
+    } catch (error) {
+      console.error(error);
+      alert("Image upload failed.");
+    }
   };
 
-  reader.readAsDataURL(file);
-
- };
-
- upload.click();
-
+  upload.click();
 }
 
 // ESCAPE USER INPUT IN HTML
