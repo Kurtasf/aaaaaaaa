@@ -675,31 +675,39 @@ async function returnTool(index) {
 
 function showRecords() {
 
- let output = "";
+ function showRecords() {
 
- records.forEach((record,index)=>{
+  let output = "";
 
-  output += `
-  <tr>
-   <td>${safe(record.borrower)}</td>
-   <td>${safe(record.tool)}</td>
-   <td>${record.quantity}</td>
-   <td>${safe(record.date)}</td>
-   <td>${record.status}</td>
-   <td>${safe(record.returner)}</td>
-   <td>
-    ${record.status === "BORROWED"
-     ? `<button onclick="returnTool(${index})">RETURN</button>`
-     : "✓ COMPLETED"}
-   </td>
-  </tr>
-  `;
+  records.forEach((record, index) => {
 
- });
+    output += `
+      <tr>
+        <td>${safe(record.borrower)}</td>
+        <td>${safe(record.tool)}</td>
+        <td>${record.quantity}</td>
+        <td>${safe(record.date)}</td>
 
- document.getElementById("records").innerHTML =
- output || "<tr><td colspan='7'>No records yet.</td></tr>";
+        <td>
+          ${record.returnDate
+            ? safe(record.returnDate)
+            : "Not yet returned"}
+        </td>
 
+        <td>${safe(record.status)}</td>
+        <td>${safe(record.returner || "-")}</td>
+
+        <td>
+          ${record.status === "BORROWED"
+            ? `<button onclick="returnTool(${index})">RETURN</button>`
+            : "✓ COMPLETED"}
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("records").innerHTML =
+    output || "<tr><td colspan='8'>No records yet.</td></tr>";
 }
 
 // ADD NEW TOOL
