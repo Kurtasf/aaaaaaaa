@@ -523,8 +523,14 @@ function startToolsSync() {
 
 // DELETE TOOL
 
-
 async function deleteTool(index) {
+
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+  if (!auth.currentUser || auth.currentUser.uid !== adminUID) {
+    alert("Access denied! Admin only.");
+    return;
+  }
 
   let tool = tools[index];
 
@@ -551,7 +557,6 @@ async function deleteTool(index) {
     alert("Unable to delete tool. Please try again.");
   }
 }
-
 
 // BORROW TOOL
 
