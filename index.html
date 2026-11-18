@@ -818,51 +818,7 @@ function showRecords() {
 
     showRecords();
 
-  } catch (error) {
-    console.error("Load records error:", error);
-    alert("Unable to load borrowing history.");
-  }
-}
-
-function showRecords() {
-
-  let output = "";
-
-  records.forEach((record, index) => {
-
-    output += `
-      <tr>
-        <td>${safe(record.borrower)}</td>
-        <td>${safe(record.tool)}</td>
-        <td>${record.quantity}</td>
-        <td>${safe(record.date)}</td>
-
-        <td>
-          ${record.returnDate
-            ? safe(record.returnDate)
-            : "Not yet returned"}
-        </td>
-
-        <td>${safe(record.status)}</td>
-
-        <td>${safe(record.returner || "-")}</td>
-
-        <td>
-          ${record.status === "BORROWED"
-            ? `<button onclick="returnTool(${index})">RETURN</button>`
-            : "✓ COMPLETED"}
-        </td>
-      </tr>
-    `;
-
-  });
-
-  document.getElementById("records").innerHTML =
-    output || "<tr><td colspan='8'>No records yet.</td></tr>";
-
-}
-
-
+  
 // ADD NEW TOOL
 
 
