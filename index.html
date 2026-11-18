@@ -758,6 +758,142 @@ async function showAdminHistory() {
   });
 }
 
+const ADMIN_WORKER_URL =
+  "https://tool-borrowing-admin.ietisysteminv.workers.dev";
+
+async function showAdminAccounts() {
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+  if (!auth.currentUser || auth.currentUser.uid !== adminUID) {
+    alert("Access denied! Admin only.");
+    return;
+  }
+
+  const section = document.getElementById("adminAccountsSection");
+  section.style.display = "block";
+
+  await loadAdminAccounts();
+
+  section.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+async function loadAdminAccounts() {
+  const list = document.getElementById("adminAccountsList");
+
+  if (!auth.currentUser) {
+    alert("Please login first!");
+    return;
+  }
+
+  list.innerHTML = `
+    <tr><td colspan="4">Loading accounts...</td></tr>
+  `;
+
+  try {
+    const token = await auth.currentUser.getIdToken();
+
+    const response = await fetch(
+      ADMIN_WORKER_URL + "/users",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Unable to load accounts.");
+    }
+
+    if (!result.users || result.users.length === 0) {
+      list.innerHTML = `
+        <tr><td colspan="4">No accounts found.</td></tr>
+      `;
+      return;
+    }
+
+    list.innerHTML = result.users.map(user => `
+      <tr>
+        <td>${safe(user.email || "No email")}</td>
+        <td>${safe(user.displayName || "-")}</td>
+        <td>${user.emailVerified ? "Yes" : "No"}</td>
+        <td>
+          ${user.uid === "3lzOvXcSwveDgD0cEP9T0i0lvgs2"
+            ? "ADMIN"
+            : `<button onclick="deleteAdminAccount('${user.uid}')"
+                 style="background:#dc2626;color:white;">
+                 DELETE
+               </button>`
+          }
+        </td>
+      </tr>
+    `).join("");
+
+  } catch (error) {
+    console.error("Manage accounts error:", error);
+
+    list.innerHTML = `
+      <tr>
+        <td colspan="4">Unable to load accounts.</td>
+      </tr>
+    `;
+
+    alert(error.message || "Unable to load accounts.");
+  }
+}
+
+async function deleteAdminAccount(uid) {
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+  if (!auth.currentUser || auth.currentUser.uid !== adminUID) {
+    alert("Access denied! Admin only.");
+    return;
+  }
+
+  if (uid === adminUID) {
+    alert("You cannot delete your own admin account!");
+    return;
+  }
+
+  if (!confirm("Are you sure you want to delete this account?")) {
+    return;
+  }
+
+  try {
+    const token = await auth.currentUser.getIdToken();
+
+    const response = await fetch(
+      ADMIN_WORKER_URL + "/users/" + encodeURIComponent(uid),
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Unable to delete account.");
+    }
+
+    alert("Account deleted successfully!");
+
+    await loadAdminAccounts();
+
+  } catch (error) {
+    console.error("Delete account error:", error);
+    alert(error.message || "Unable to delete account.");
+  }
+}
+
 
 function showAdminTools() {
 
