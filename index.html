@@ -630,11 +630,17 @@ async function borrowTool(index) {
 
 
 
+
 async function returnTool(index) {
 
   let record = records[index];
 
   if (!record || record.status !== "BORROWED") return;
+
+  if (!record.id) {
+    alert("Record ID missing. Please reload your borrowing history.");
+    return;
+  }
 
   let returner = prompt("Enter the name of the person returning the tool:");
 
@@ -652,27 +658,36 @@ async function returnTool(index) {
 
   try {
     let toolRef = db.collection("tools").doc(tool.id);
+    let recordRef = db.collection("borrowRecords").doc(record.id);
 
     await db.runTransaction(async (transaction) => {
-      let doc = await transaction.get(toolRef);
 
-      if (!doc.exists) {
-        throw new Error("Tool not found in Firebase!");
+      let toolDoc = await transaction.get(toolRef);
+      let recordDoc = await transaction.get(recordRef);
+
+      if (!toolDoc.exists || !recordDoc.exists) {
+        throw new Error("Tool or borrowing record not found!");
       }
 
-      let currentQuantity = Number(doc.data().quantity) || 0;
+      if (recordDoc.data().status !== "BORROWED") {
+        throw new Error("This item has already been returned!");
+      }
+
+      let currentQuantity = Number(toolDoc.data().quantity) || 0;
 
       transaction.update(toolRef, {
         quantity: currentQuantity + record.quantity
       });
+
+      transaction.update(recordRef, {
+        status: "RETURNED",
+        returner: returner.trim(),
+        returnDate: new Date().toLocaleString()
+      });
+
     });
 
-    record.status = "RETURNED";
-    record.returner = returner.trim();
-    record.returnDate = new Date().toLocaleString();
-
-    saveData();
-    showRecords();
+    await loadRecords();
 
     alert("Item successfully returned!");
 
