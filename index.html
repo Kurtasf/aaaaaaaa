@@ -566,6 +566,11 @@ async function borrowTool(index) {
   let tool = tools[index];
   if (!tool) return;
 
+  if (!auth.currentUser) {
+    alert("Please login first!");
+    return;
+  }
+
   let borrower = prompt("Enter the name of the borrower:");
 
   if (!borrower || !borrower.trim()) {
@@ -582,15 +587,12 @@ async function borrowTool(index) {
     return;
   }
 
-  if (!auth.currentUser) {
-    alert("Please login first!");
-    return;
-  }
-
   try {
     let toolRef = db.collection("tools").doc(tool.id);
+    let recordRef = db.collection("borrowRecords").doc();
 
     await db.runTransaction(async (transaction) => {
+
       let doc = await transaction.get(toolRef);
 
       if (!doc.exists) {
@@ -606,17 +608,20 @@ async function borrowTool(index) {
       transaction.update(toolRef, {
         quantity: currentQuantity - quantity
       });
+
+      transaction.set(recordRef, {
+        borrowerUid: auth.currentUser.uid,
+        borrower: borrower.trim(),
+        tool: tool.name,
+        quantity: quantity,
+        date: new Date().toLocaleString(),
+        status: "BORROWED",
+        returner: "-"
+      });
+
     });
 
-    await db.collection("borrowRecords").add({
-      borrowerUid: auth.currentUser.uid,
-      borrower: borrower.trim(),
-      tool: tool.name,
-      quantity: quantity,
-      date: new Date().toLocaleString(),
-      status: "BORROWED",
-      returner: "-"
-    });
+    await loadRecords();
 
     alert("Successfully borrowed!");
 
@@ -625,6 +630,7 @@ async function borrowTool(index) {
     alert(error.message || "Unable to borrow tool.");
   }
 }
+
 
 // RETURN TOOL
 
