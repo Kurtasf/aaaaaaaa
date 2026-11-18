@@ -350,27 +350,30 @@ function saveData() {
 // OPEN DASHBOARD
 
 function openDashboard() {
-console.log("OPEN DASHBOARD CALLED");
- let user = JSON.parse(
-  localStorage.getItem("currentUser")
- );
+  console.log("OPEN DASHBOARD CALLED");
 
- if(!user) return;
+  let user = JSON.parse(
+    localStorage.getItem("currentUser")
+  );
 
- document.getElementById("loginPage").style.display="none";
- document.getElementById("dashboard").style.display="block";
+  if (!user) return;
 
- document.getElementById("welcome").innerText =
-  "Welcome, " + user.email + "!";
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
 
- document.getElementById("notification").innerText =
-  "A login was detected for " + user.email +
-  " at " + user.loginDate;
+  document.getElementById("welcome").innerText =
+    "Welcome, " + user.email + "!";
 
-startToolsSync();
-showRecords();
+  document.getElementById("notification").innerText =
+    "A login was detected for " + user.email +
+    " at " + user.loginDate;
+
+  if (!stopToolsSync) {
+    startToolsSync();
+  }
+
+  showRecords();
 }
-
 // AUTO LOGIN AFTER REFRESH
 
 
