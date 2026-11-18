@@ -564,7 +564,6 @@ async function deleteTool(index) {
 async function borrowTool(index) {
 
   let tool = tools[index];
-
   if (!tool) return;
 
   let borrower = prompt("Enter the name of the borrower:");
@@ -580,6 +579,11 @@ async function borrowTool(index) {
 
   if (!Number.isInteger(quantity) || quantity < 1) {
     alert("Invalid quantity!");
+    return;
+  }
+
+  if (!auth.currentUser) {
+    alert("Please login first!");
     return;
   }
 
@@ -604,7 +608,8 @@ async function borrowTool(index) {
       });
     });
 
-    records.push({
+    await db.collection("borrowRecords").add({
+      borrowerUid: auth.currentUser.uid,
       borrower: borrower.trim(),
       tool: tool.name,
       quantity: quantity,
@@ -613,9 +618,6 @@ async function borrowTool(index) {
       returner: "-"
     });
 
-    saveData();
-    showRecords();
-
     alert("Successfully borrowed!");
 
   } catch (error) {
@@ -623,7 +625,6 @@ async function borrowTool(index) {
     alert(error.message || "Unable to borrow tool.");
   }
 }
-
 
 // RETURN TOOL
 
