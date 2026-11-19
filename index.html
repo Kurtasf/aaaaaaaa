@@ -478,7 +478,15 @@ function logout() {
 // DISPLAY TOOLS
 
 function showTools() {
-  let search = document.getElementById("search").value.toLowerCase();
+  const searchInput = document.getElementById("search");
+  const toolsContainer = document.getElementById("tools");
+
+  if (!toolsContainer) return;
+
+  const search = searchInput
+    ? searchInput.value.toLowerCase()
+    : "";
+
   let output = "";
 
   const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
@@ -486,10 +494,11 @@ function showTools() {
                   auth.currentUser.uid === adminUID;
 
   tools.forEach((tool, index) => {
-    if (tool.name.toLowerCase().includes(search)) {
+    if ((tool.name || "").toLowerCase().includes(search)) {
       output += `
         <div class="card">
-          <img src="${tool.image}" alt="Tool image"
+          <img src="${tool.image || 'https://placehold.co/300x200?text=Tool+Image'}"
+            alt="Tool image"
             onerror="this.src='https://placehold.co/300x200?text=Tool+Image'">
 
           <h3>${safe(tool.name)}</h3>
@@ -499,7 +508,6 @@ function showTools() {
 
           ${isAdmin ? `
             <button onclick="changeImage(${index})">CHANGE IMAGE</button>
-
             <button onclick="deleteTool(${index})" style="background:#dc2626">
               DELETE TOOL
             </button>
@@ -509,10 +517,8 @@ function showTools() {
     }
   });
 
-  document.getElementById("tools").innerHTML =
-    output || "No tools found.";
+  toolsContainer.innerHTML = output || "No tools found.";
 }
-
 
 // REAL-TIME FIRESTORE TOOLS SYNC
 
