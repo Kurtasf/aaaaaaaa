@@ -356,6 +356,9 @@ auth.onAuthStateChanged(function(firebaseUser) {
   }
 
 });
+  }
+
+});
 
   console.log("OPEN DASHBOARD CALLED");
 
