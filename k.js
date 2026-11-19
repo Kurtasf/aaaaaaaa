@@ -322,6 +322,7 @@ function signup() {
 
 // CHECK FIREBASE LOGIN SESSION
 
+
 auth.onAuthStateChanged(function(firebaseUser) {
 
   if (firebaseUser) {
@@ -344,15 +345,18 @@ auth.onAuthStateChanged(function(firebaseUser) {
       stopToolsSync = null;
     }
 
-    document.getElementById("dashboard").style.display = "none";
-    document.getElementById("signupPage").style.display = "none";
-    document.getElementById("loginPage").style.display = "block";
+    const dashboard = document.getElementById("dashboard");
+    const signupPage = document.getElementById("signupPage");
+    const loginPage = document.getElementById("loginPage");
+
+    if (dashboard) dashboard.style.display = "none";
+    if (signupPage) signupPage.style.display = "none";
+    if (loginPage) loginPage.style.display = "block";
 
   }
 
 });
 
-function openDashboard() {
   console.log("OPEN DASHBOARD CALLED");
 
   const savedUser = localStorage.getItem("currentUser");
