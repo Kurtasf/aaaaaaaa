@@ -782,7 +782,27 @@ async function showMyHistory() {
     block: "start"
   });
 }
+async function showMyHistory() {
 
+  if (!auth.currentUser) {
+    alert("Please login first!");
+    return;
+  }
+
+  const historySection =
+    document.getElementById("borrowingHistorySection");
+
+  historySection.style.display = "block";
+
+  await loadRecords();
+
+  historySection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+window.showMyHistory = showMyHistory;
 async function showAdminHistory() {
 async function showMyHistory() {
 
