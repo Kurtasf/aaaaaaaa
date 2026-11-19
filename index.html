@@ -522,22 +522,32 @@ function showTools() {
 
 // REAL-TIME FIRESTORE TOOLS SYNC
 
-
 let stopToolsSync = null;
 
 function startToolsSync() {
 
+  // Stop previous listener to prevent duplicates
+  if (stopToolsSync) {
+    stopToolsSync();
+    stopToolsSync = null;
+  }
+
+  // Check Firebase authentication
   if (!auth.currentUser) {
     console.error("Tools sync blocked: User is not authenticated.");
     return;
   }
 
+  console.log("Starting tools sync...");
   console.log("Authenticated UID:", auth.currentUser.uid);
 
   stopToolsSync = db.collection("tools").onSnapshot(
     function(snapshot) {
+
+      console.log("Firestore tools received:", snapshot.size);
+
       tools = snapshot.docs.map(function(doc) {
-        let data = doc.data();
+        const data = doc.data();
 
         return {
           id: doc.id,
@@ -548,15 +558,20 @@ function startToolsSync() {
         };
       });
 
+      // Automatically update dashboard
       showTools();
+
+      console.log("Tools successfully displayed:", tools.length);
     },
+
     function(error) {
       console.error("Tools sync error:", error);
-      alert("Unable to load tools from Firebase.");
+      console.error("Error code:", error.code);
+
+      alert("Unable to load tools from Firebase: " + error.message);
     }
   );
 }
-
 
 // DELETE TOOL
 
