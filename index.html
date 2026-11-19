@@ -323,33 +323,34 @@ th {
 
 <!-- BORROWING RECORDS -->
 <div id="borrowingHistorySection" class="section" style="display:none;">
-</div>
-<h2>📋 BORROWING HISTORY</h2>
-<div style="overflow-x:auto">
-<table>
-  <thead>
-    <tr>
-      <th>Borrower</th>
-      <th>Tool</th>
-      <th>Quantity</th>
-      <th>Date Borrowed</th>
-      <th>Date Returned</th>
-      <th>Status</th>
-      <th>Returner</th>
-      <th>Action</th>
-    </tr>
-  </thead>
 
-  <tbody id="records"></tbody>
-</table>
-</div>
-</div>
+  <h2>📋 BORROWING HISTORY</h2>
+
+  <button onclick="clearReturnedHistory()"
+          style="background:#dc2626;color:white;">
+    CLEAR ALL HISTORY
+  </button>
+
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Borrower</th>
+          <th>Tool</th>
+          <th>Quantity</th>
+          <th>Date Borrowed</th>
+          <th>Date Returned</th>
+          <th>Status</th>
+          <th>Returner</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="records"></tbody>
+    </table>
+  </div>
 
 </div>
-</div>
-
-<script>
-
 
 // LOAD SAVED DATA
 
