@@ -356,9 +356,8 @@ auth.onAuthStateChanged(function(firebaseUser) {
   }
 
 });
-  }
 
-});
+function openDashboard() {
 
   console.log("OPEN DASHBOARD CALLED");
 
