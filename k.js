@@ -209,51 +209,48 @@ function login() {
     return;
   }
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then(function(userCredential) {
 
-      let firebaseUser = userCredential.user;
+auth.signInWithEmailAndPassword(email, password)
+  .then(function(userCredential) {
 
-      let user = {
-        email: firebaseUser.email,
-        loginDate: new Date().toLocaleString()
-      };
+    let firebaseUser = userCredential.user;
 
-      localStorage.setItem("currentUser", JSON.stringify(user));
+    let user = {
+      email: firebaseUser.email,
+      loginDate: new Date().toLocaleString()
+    };
 
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("signupPage").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
+    localStorage.setItem("currentUser", JSON.stringify(user));
 
-      document.getElementById("welcome").innerText =
-        "Welcome, " + (firebaseUser.displayName || firebaseUser.email) + "!";
+    // Open dashboard and start Firebase sync
+    openDashboard();
 
-      sendLoginNotification(
-        email,
-        "SUCCESSFUL",
-        firebaseUser.displayName
-      );
+    sendLoginNotification(
+      email,
+      "SUCCESSFUL",
+      firebaseUser.displayName
+    );
 
-    })
-    .catch(function(error) {
+  })
+  .catch(function(error) {
 
-      console.error("Firebase Login Error:", error);
+    console.error("Firebase Login Error:", error);
 
-      emailjs.send(
-        "service_vpjxt1a",
-        "template_a4ivrwi",
-        {
-          user_name: email.split("@")[0],
-          user_email: email,
-          login_date: new Date().toLocaleString(),
-          login_status: "FAILED"
-        }
-      );
+    emailjs.send(
+      "service_vpjxt1a",
+      "template_a4ivrwi",
+      {
+        user_name: email.split("@")[0],
+        user_email: email,
+        login_date: new Date().toLocaleString(),
+        login_status: "FAILED"
+      }
+    );
 
-      message.innerText = "Invalid email or password!";
+    message.innerText = "Invalid email or password!";
 
-    });
-}
+  });
+
 
 // SHOW SIGN UP PAGE
 function showSignup() {
