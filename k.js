@@ -1,3 +1,4 @@
+var stopToolsSync = null;
 const EMAIL_NOTIFICATIONS_ENABLED = true;
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
