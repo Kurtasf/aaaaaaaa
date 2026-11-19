@@ -220,7 +220,10 @@ auth.signInWithEmailAndPassword(email, password)
       loginDate: new Date().toLocaleString()
     };
 
-    localStorage.setItem("currentUser", JSON.stringify(user));
+    localStorage.setItem("currentUser", JSON.stringify({
+  uid: user.uid,
+  email: user.email
+}));
 
     // Open dashboard and start Firebase sync
     openDashboard();
