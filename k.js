@@ -360,13 +360,17 @@ auth.onAuthStateChanged(function(firebaseUser) {
 
 });
 
+
 function openDashboard() {
 
   console.log("OPEN DASHBOARD CALLED");
 
   const savedUser = localStorage.getItem("currentUser");
 
-  if (!savedUser) return;
+  if (!savedUser) {
+    console.warn("currentUser is missing!");
+    return;
+  }
 
   const user = JSON.parse(savedUser);
   const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
@@ -374,22 +378,49 @@ function openDashboard() {
   const isAdmin = auth.currentUser &&
                   auth.currentUser.uid === adminUID;
 
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("signupPage").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
+  const elements = [
+    "loginPage",
+    "signupPage",
+    "dashboard",
+    "welcome",
+    "notification",
+    "adminPanel",
+    "addToolSection"
+  ];
 
-  document.getElementById("welcome").innerText =
-    "Welcome, " + user.email + "!";
+  elements.forEach(id => {
+    if (!document.getElementById(id)) {
+      console.error("MISSING HTML ELEMENT:", id);
+    }
+  });
 
-  document.getElementById("notification").innerText =
+  const loginPage = document.getElementById("loginPage");
+  const signupPage = document.getElementById("signupPage");
+  const dashboard = document.getElementById("dashboard");
+  const welcome = document.getElementById("welcome");
+  const notification = document.getElementById("notification");
+  const adminPanel = document.getElementById("adminPanel");
+  const addToolSection = document.getElementById("addToolSection");
+
+  if (!loginPage || !signupPage || !dashboard ||
+      !welcome || !notification || !adminPanel ||
+      !addToolSection) {
+    console.error("Dashboard cannot open: missing HTML element.");
+    return;
+  }
+
+  loginPage.style.display = "none";
+  signupPage.style.display = "none";
+  dashboard.style.display = "block";
+
+  welcome.innerText = "Welcome, " + user.email + "!";
+
+  notification.innerText =
     "A login was detected for " + user.email +
-    " at " + user.loginDate;
+    " at " + (user.loginDate || "Unknown");
 
-  document.getElementById("adminPanel").style.display =
-    isAdmin ? "block" : "none";
-
-  document.getElementById("addToolSection").style.display =
-    isAdmin ? "block" : "none";
+  adminPanel.style.display = isAdmin ? "block" : "none";
+  addToolSection.style.display = isAdmin ? "block" : "none";
 
   if (!stopToolsSync) {
     startToolsSync();
