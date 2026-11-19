@@ -351,3 +351,40 @@ auth.onAuthStateChanged(function(firebaseUser) {
   }
 
 });
+
+function openDashboard() {
+  console.log("OPEN DASHBOARD CALLED");
+
+  const savedUser = localStorage.getItem("currentUser");
+
+  if (!savedUser) return;
+
+  const user = JSON.parse(savedUser);
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+  const isAdmin = auth.currentUser &&
+                  auth.currentUser.uid === adminUID;
+
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("signupPage").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+
+  document.getElementById("welcome").innerText =
+    "Welcome, " + user.email + "!";
+
+  document.getElementById("notification").innerText =
+    "A login was detected for " + user.email +
+    " at " + user.loginDate;
+
+  document.getElementById("adminPanel").style.display =
+    isAdmin ? "block" : "none";
+
+  document.getElementById("addToolSection").style.display =
+    isAdmin ? "block" : "none";
+
+  if (!stopToolsSync) {
+    startToolsSync();
+  }
+
+  loadRecords();
+}
