@@ -320,7 +320,7 @@ function signup() {
       message.innerText = error.message;
     });
 }
-let stopToolsSync = null;
+
 // CHECK FIREBASE LOGIN SESSION
 
 auth.onAuthStateChanged(function(firebaseUser) {
