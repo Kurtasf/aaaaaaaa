@@ -763,6 +763,26 @@ async function returnTool(index) {
 
 // DISPLAY RECORDS
 
+async function showMyHistory() {
+
+  if (!auth.currentUser) {
+    alert("Please login first!");
+    return;
+  }
+
+  const historySection =
+    document.getElementById("borrowingHistorySection");
+
+  historySection.style.display = "block";
+
+  await loadRecords();
+
+  historySection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
 async function showAdminHistory() {
 async function showMyHistory() {
 
