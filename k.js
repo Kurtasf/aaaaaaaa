@@ -252,7 +252,7 @@ auth.signInWithEmailAndPassword(email, password)
   });
 
 
-// SHOW SIGN UP PAGE
+}// SHOW SIGN UP PAGE
 function showSignup() {
   document.getElementById("loginPage").style.display = "none";
   document.getElementById("signupPage").style.display = "block";
