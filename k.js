@@ -329,11 +329,23 @@ auth.onAuthStateChanged(function(firebaseUser) {
 
   if (firebaseUser) {
 
-    if (localStorage.getItem("currentUser")) {
+    console.log("Firebase authenticated:", firebaseUser.uid);
+
+    const savedUser = localStorage.getItem("currentUser");
+
+    if (savedUser) {
       openDashboard();
+    } else {
+      console.warn("Firebase user exists but currentUser is missing.");
     }
 
   } else {
+
+    // Stop Firestore real-time listener
+    if (stopToolsSync) {
+      stopToolsSync();
+      stopToolsSync = null;
+    }
 
     document.getElementById("dashboard").style.display = "none";
     document.getElementById("signupPage").style.display = "none";
