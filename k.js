@@ -361,24 +361,12 @@ auth.onAuthStateChanged(function(firebaseUser) {
 });
 
 
+
 function openDashboard() {
 
   console.log("OPEN DASHBOARD CALLED");
 
-  const savedUser = localStorage.getItem("currentUser");
-
-  if (!savedUser) {
-    console.warn("currentUser is missing!");
-    return;
-  }
-
-  const user = JSON.parse(savedUser);
-  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
-
-  const isAdmin = auth.currentUser &&
-                  auth.currentUser.uid === adminUID;
-
-  const elements = [
+  const ids = [
     "loginPage",
     "signupPage",
     "dashboard",
@@ -388,10 +376,14 @@ function openDashboard() {
     "addToolSection"
   ];
 
-  elements.forEach(id => {
-    if (!document.getElementById(id)) {
-      console.error("MISSING HTML ELEMENT:", id);
-    }
+  ids.forEach(id => {
+    const element = document.getElementById(id);
+
+    console.log(
+      "HTML ID:",
+      id,
+      element ? "FOUND" : "NOT FOUND"
+    );
   });
 
   const loginPage = document.getElementById("loginPage");
@@ -405,9 +397,22 @@ function openDashboard() {
   if (!loginPage || !signupPage || !dashboard ||
       !welcome || !notification || !adminPanel ||
       !addToolSection) {
-    console.error("Dashboard cannot open: missing HTML element.");
+    console.error("STOPPED: Missing HTML element.");
     return;
   }
+
+  const savedUser = localStorage.getItem("currentUser");
+
+  if (!savedUser) {
+    console.error("currentUser missing!");
+    return;
+  }
+
+  const user = JSON.parse(savedUser);
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+  const isAdmin = auth.currentUser &&
+                  auth.currentUser.uid === adminUID;
 
   loginPage.style.display = "none";
   signupPage.style.display = "none";
