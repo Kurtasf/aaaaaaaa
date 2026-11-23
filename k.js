@@ -179,6 +179,7 @@ function showSignup() {
 
 
 // LOGIN FUNCTION
+
 function login() {
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value;
@@ -201,6 +202,7 @@ function login() {
   auth.signInWithEmailAndPassword(email, password)
 
     .then(function(userCredential) {
+
       let firebaseUser = userCredential.user;
 
       let user = {
@@ -209,10 +211,57 @@ function login() {
         loginDate: new Date().toLocaleString()
       };
 
-     localStorage.setItem(
-  "currentUser",
-  JSON.stringify(user)
-);
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify(user)
+      );
+
+      message.innerText = "";
+
+      // Successful login email
+      sendLoginNotification(
+        firebaseUser.email,
+        "SUCCESSFUL",
+        firebaseUser.displayName
+      );
+
+      // Save login notification separately
+      return db.collection("loginNotifications").add({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: firebaseUser.displayName || "Unknown User",
+        status: "SUCCESSFUL",
+        loginTime: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(function() {
+
+        console.log("LOGIN NOTIFICATION SAVED!");
+
+      }).catch(function(error) {
+
+        console.error(
+          "LOGIN NOTIFICATION SAVE ERROR:",
+          error
+        );
+
+      });
+
+    })
+
+    .catch(function(error) {
+
+      // Only authentication errors reach this catch
+      console.error("Firebase Authentication Error:", error);
+
+      message.innerText = "Invalid email or password!";
+
+      sendLoginNotification(
+        email,
+        "FAILED",
+        email.split("@")[0]
+      );
+
+    });
+}
 
       // SEND EMAIL NOTIFICATION
      sendLoginNotification(
