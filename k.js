@@ -1,5 +1,5 @@
 
-const EMAIL_NOTIFICATIONS_ENABLED = false;
+const EMAIL_NOTIFICATIONS_DISABLED = false;
 
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
