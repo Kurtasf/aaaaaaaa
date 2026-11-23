@@ -173,7 +173,7 @@ function sendLoginNotification(email, status, userName) {
 async function sendLoginNotification(user) {
   try {
     const idToken = await user.getIdToken();
-
+  console.log("SEND LOGIN NOTIFICATION FUNCTION CALLED!");
     await fetch(
       "https://tool-borrowing-admin.ietisysteminv.workers.dev/notify-login",
       {
