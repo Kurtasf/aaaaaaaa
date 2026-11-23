@@ -180,6 +180,7 @@ function showSignup() {
 
 // LOGIN FUNCTION
 
+
 function login() {
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value;
@@ -203,9 +204,9 @@ function login() {
 
     .then(function(userCredential) {
 
-      let firebaseUser = userCredential.user;
+      const firebaseUser = userCredential.user;
 
-      let user = {
+      const user = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
         loginDate: new Date().toLocaleString()
@@ -218,64 +219,33 @@ function login() {
 
       message.innerText = "";
 
-      // Successful login email
+      // Send successful login email
       sendLoginNotification(
         firebaseUser.email,
         "SUCCESSFUL",
         firebaseUser.displayName
       );
 
-      // Save login notification separately
-     db.collection("login_notifications").add({
-  userUid: firebaseUser.uid,
-  userEmail: firebaseUser.email,
-  userName: firebaseUser.displayName || "Unknown User",
-  read: false,
-  timestamp: firebase.firestore.FieldValue.serverTimestamp()
-})
-.then(function() {
-  console.log("LOGIN NOTIFICATION SAVED!");
-})
-.catch(function(error) {
-  console.error("FIRESTORE SAVE ERROR:", error);
-});
-
-      // Only authentication errors reach this catch
-      console.error("Firebase Authentication Error:", error);
-
-      message.innerText = "Invalid email or password!";
-
-      sendLoginNotification(
-        email,
-        "FAILED",
-        email.split("@")[0]
-      );
-
-    });
-}
-
-      // SEND EMAIL NOTIFICATION
-     sendLoginNotification(
-  email,
-  "SUCCESSFUL",
-  firebaseUser.displayName
-);
-      // SAVE FIRESTORE NOTIFICATION
-      return db.collection("loginNotifications").add({
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        name: firebaseUser.displayName || "Unknown User",
-        status: "SUCCESSFUL",
-        loginTime: firebase.firestore.FieldValue.serverTimestamp()
+      // Save Firestore notification
+      return db.collection("login_notifications").add({
+        userUid: firebaseUser.uid,
+        userEmail: firebaseUser.email,
+        userName: firebaseUser.displayName || "Unknown User",
+        read: false,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(function() {
+        console.log("LOGIN NOTIFICATION SAVED!");
+      })
+      .catch(function(error) {
+        console.error("FIRESTORE SAVE ERROR:", error);
       });
-    })
 
-    .then(function() {
-      console.log("LOGIN NOTIFICATION SAVED!");
     })
 
     .catch(function(error) {
-      console.error("Firebase Login Error:", error);
+
+      console.error("AUTHENTICATION ERROR:", error);
 
       message.innerText = "Invalid email or password!";
 
@@ -284,8 +254,10 @@ function login() {
         "FAILED",
         email.split("@")[0]
       );
+
     });
 }
+
 
 // SHOW LOGIN PAGE
 function showLogin() {
