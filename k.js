@@ -510,8 +510,10 @@ async function enableLoginNotifications() {
 
     console.log("FCM Token:", token);
 
-   messaging.onMessage(async (payload) => {
+  messaging.onMessage(async (payload) => {
   console.log("FCM FOREGROUND MESSAGE RECEIVED:", payload);
+
+  alert("FCM MESSAGE RECEIVED ON ADMIN PHONE!");
 
   const title =
     payload.notification?.title || "Tool Borrowing System";
@@ -524,6 +526,13 @@ async function enableLoginNotifications() {
       body: body,
       icon: "/favicon.ico"
     });
+
+    console.log("NOTIFICATION DISPLAYED!");
+
+  } catch (error) {
+    console.error("SHOW NOTIFICATION ERROR:", error);
+  }
+});
 
     console.log("NOTIFICATION DISPLAYED!");
   } catch (error) {
