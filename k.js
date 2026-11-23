@@ -216,15 +216,35 @@ auth.signInWithEmailAndPassword(email, password)
     let firebaseUser = userCredential.user;
 
     let user = {
-  uid: firebaseUser.uid,
-  email: firebaseUser.email,
-  loginDate: new Date().toLocaleString()
-};
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      loginDate: new Date().toLocaleString()
+    };
 
-localStorage.setItem("currentUser", JSON.stringify(user));
-  uid: user.uid,
-  email: user.email
-}));
+    localStorage.setItem("currentUser", JSON.stringify(user));
+
+    // SAVE LOGIN NOTIFICATION
+    return db.collection("loginNotifications").add({
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      name: firebaseUser.displayName || "Unknown User",
+      status: "SUCCESSFUL",
+      loginTime: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function() {
+
+      console.log("LOGIN NOTIFICATION SAVED!");
+
+      openDashboard();
+
+      sendLoginNotification(
+        email,
+        "SUCCESSFUL",
+        firebaseUser.displayName
+      );
+
+    });
+
+  })
 
     // SAVE LOGIN NOTIFICATION TO FIRESTORE
 db.collection("loginNotifications").add({
