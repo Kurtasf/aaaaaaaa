@@ -453,7 +453,7 @@ async function enableLoginNotifications() {
     );
 
     const token = await messaging.getToken({
-      vapidKey: "YOUR_PUBLIC_VAPID_KEY",
+      vapidKey: "BPyt1ytDkRXpdEDkIHmGrjR_--6MPje20iT76u7MePGKKunbgICulP1m5k7OgUQZD0jmiHvQ1g4wbNcZdhgdBbY",
       serviceWorkerRegistration: registration
     });
 
