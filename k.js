@@ -177,6 +177,77 @@ function showSignup() {
   document.getElementById("signupPage").style.display = "block";
 }
 
+
+// LOGIN FUNCTION
+function login() {
+  let email = document.getElementById("email").value.trim();
+  let password = document.getElementById("password").value;
+  let message = document.getElementById("message");
+
+  if (!email || !password) {
+    message.innerText = "Please enter your email and password!";
+    return;
+  }
+
+  let strongPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
+
+  if (!strongPassword.test(password)) {
+    message.innerText =
+      "Password must have 8 characters, uppercase, lowercase, number, and special character!";
+    return;
+  }
+
+  auth.signInWithEmailAndPassword(email, password)
+
+    .then(function(userCredential) {
+      let firebaseUser = userCredential.user;
+
+      let user = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        loginDate: new Date().toLocaleString()
+      };
+
+      localStorage.setItem("currentUser", JSON.stringify(user));
+
+      // OPEN DASHBOARD
+      openDashboard();
+
+      // SEND EMAIL NOTIFICATION
+      sendLoginNotification(
+        firebaseUser.email,
+        "SUCCESSFUL",
+        firebaseUser.displayName
+      );
+
+      // SAVE FIRESTORE NOTIFICATION
+      return db.collection("loginNotifications").add({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: firebaseUser.displayName || "Unknown User",
+        status: "SUCCESSFUL",
+        loginTime: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+
+    .then(function() {
+      console.log("LOGIN NOTIFICATION SAVED!");
+    })
+
+    .catch(function(error) {
+      console.error("Firebase Login Error:", error);
+
+      message.innerText = "Invalid email or password!";
+
+      sendLoginNotification(
+        email,
+        "FAILED",
+        email.split("@")[0]
+      );
+    });
+}
+
 // SHOW LOGIN PAGE
 function showLogin() {
   document.getElementById("signupPage").style.display = "none";
