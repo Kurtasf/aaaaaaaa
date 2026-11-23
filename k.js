@@ -436,6 +436,68 @@ function openDashboard() {
   loadRecords();
 }
 
+
+async function enableLoginNotifications() {
+  try {
+    const permission = await Notification.requestPermission();
+
+    if (permission !== "granted") {
+      alert("Notification permission was not granted.");
+      return;
+    }
+
+    const messaging = firebase.messaging();
+
+    const registration = await navigator.serviceWorker.register(
+      "/firebase-messaging-sw.js"
+    );
+
+    const token = await messaging.getToken({
+      vapidKey: "YOUR_PUBLIC_VAPID_KEY",
+      serviceWorkerRegistration: registration
+    });
+
+    if (!token) {
+      alert("Unable to get FCM token.");
+      return;
+    }
+
+    const user = firebase.auth().currentUser;
+
+    if (!user) {
+      alert("Please log in first.");
+      return;
+    }
+
+    await firebase.firestore()
+      .collection("adminPushTokens")
+      .doc(user.uid)
+      .set({
+        token: token,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+    alert("Phone connected! Login notifications enabled.");
+
+    console.log("FCM Token:", token);
+
+    messaging.onMessage((payload) => {
+      const title =
+        payload.notification?.title || "Tool Borrowing System";
+
+      const body =
+        payload.notification?.body || "New login detected.";
+
+      new Notification(title, { body });
+    });
+
+  } catch (error) {
+    console.error("Notification setup error:", error);
+    alert("Notification setup failed: " + error.message);
+  }
+}
+
+
 window.login = login;
 window.showSignup = showSignup;
 window.signup = signup;
