@@ -220,25 +220,27 @@ function login() {
     return;
   }
 
-  auth.signInWithEmailAndPassword(email, password)
+auth.signInWithEmailAndPassword(email, password)
 
-    .then(function(userCredential) {
+  .then(function(userCredential) {
 
-      const firebaseUser = userCredential.user;
+    const firebaseUser = userCredential.user;
 
-      const user = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        loginDate: new Date().toLocaleString()
-      };
+    // Send login notification
+    sendLoginNotification(firebaseUser);
 
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify(user)
-      );
+    const user = {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      loginDate: new Date().toLocaleString()
+    };
 
-      message.innerText = "";
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(user)
+    );
 
+    message.innerText = "";
       
       // Save Firestore notification
       return db.collection("login_notifications").add({
