@@ -172,9 +172,11 @@ function sendLoginNotification(email, status, userName) {
 
 async function sendLoginNotification(user) {
   try {
+    console.log("SEND LOGIN NOTIFICATION FUNCTION CALLED!");
+
     const idToken = await user.getIdToken();
-  console.log("SEND LOGIN NOTIFICATION FUNCTION CALLED!");
-    await fetch(
+
+    const response = await fetch(
       "https://tool-borrowing-admin.ietisysteminv.workers.dev/notify-login",
       {
         method: "POST",
@@ -185,11 +187,16 @@ async function sendLoginNotification(user) {
         body: JSON.stringify({})
       }
     );
+
+    const result = await response.text();
+
+    console.log("Notification status:", response.status);
+    console.log("Notification response:", result);
+
   } catch (error) {
     console.error("Login notification error:", error);
   }
 }
-
 
 // SHOW SIGN UP PAGE
 function showSignup() {
