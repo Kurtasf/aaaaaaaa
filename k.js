@@ -226,14 +226,29 @@ localStorage.setItem("currentUser", JSON.stringify(user));
   email: user.email
 }));
 
-    // Open dashboard and start Firebase sync
-    openDashboard();
+    // SAVE LOGIN NOTIFICATION TO FIRESTORE
+db.collection("loginNotifications").add({
+  uid: firebaseUser.uid,
+  email: firebaseUser.email,
+  name: firebaseUser.displayName || "Unknown User",
+  status: "SUCCESSFUL",
+  loginTime: firebase.firestore.FieldValue.serverTimestamp()
+})
+.then(function() {
+  console.log("LOGIN NOTIFICATION SAVED!");
+})
+.catch(function(error) {
+  console.error("LOGIN NOTIFICATION ERROR:", error);
+});
 
-    sendLoginNotification(
-      email,
-      "SUCCESSFUL",
-      firebaseUser.displayName
-    );
+// OPEN DASHBOARD
+openDashboard();
+
+sendLoginNotification(
+  email,
+  "SUCCESSFUL",
+  firebaseUser.displayName
+);
 
   })
   .catch(function(error) {
