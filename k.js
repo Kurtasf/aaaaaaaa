@@ -213,12 +213,12 @@ sendLoginNotification(
 );
 
 // SAVE LOGIN NOTIFICATION TO FIRESTORE
-return db.collection("loginNotifications").add({
-  uid: firebaseUser.uid,
-  email: firebaseUser.email,
-  name: firebaseUser.displayName || "Unknown User",
-  status: "SUCCESSFUL",
-  loginTime: firebase.firestore.FieldValue.serverTimestamp()
+return db.collection("login_notifications").add({
+  userUid: firebaseUser.uid,
+  userEmail: firebaseUser.email,
+  userName: firebaseUser.displayName || "Unknown User",
+  read: false,
+  timestamp: firebase.firestore.FieldValue.serverTimestamp()
 });
 
 })
