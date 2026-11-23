@@ -339,3 +339,7 @@ function openDashboard() {
 
   loadRecords();
 }
+
+window.login = login;
+window.showSignup = showSignup;
+window.signup = signup;
