@@ -216,11 +216,12 @@ auth.signInWithEmailAndPassword(email, password)
     let firebaseUser = userCredential.user;
 
     let user = {
-      email: firebaseUser.email,
-      loginDate: new Date().toLocaleString()
-    };
+  uid: firebaseUser.uid,
+  email: firebaseUser.email,
+  loginDate: new Date().toLocaleString()
+};
 
-    localStorage.setItem("currentUser", JSON.stringify({
+localStorage.setItem("currentUser", JSON.stringify(user));
   uid: user.uid,
   email: user.email
 }));
