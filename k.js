@@ -309,22 +309,40 @@ function signup() {
 }
 
 // CHECK FIREBASE LOGIN SESSION
+
 auth.onAuthStateChanged(function(firebaseUser) {
+
   if (firebaseUser) {
+
     console.log("Firebase authenticated:", firebaseUser.uid);
 
-    const savedUser = localStorage.getItem("currentUser");
+    let savedUser = localStorage.getItem("currentUser");
 
-    if (savedUser) {
-      openDashboard();
-    } else {
-      console.warn("Firebase user exists but currentUser is missing.");
+    if (!savedUser) {
+
+      savedUser = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        loginDate: new Date().toLocaleString()
+      };
+
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify(savedUser)
+      );
+
     }
+
+    openDashboard();
+
   } else {
+
     if (typeof stopToolsSync === "function") {
       stopToolsSync();
       stopToolsSync = null;
     }
+
+    localStorage.removeItem("currentUser");
 
     const dashboard = document.getElementById("dashboard");
     const signupPage = document.getElementById("signupPage");
@@ -333,7 +351,9 @@ auth.onAuthStateChanged(function(firebaseUser) {
     if (dashboard) dashboard.style.display = "none";
     if (signupPage) signupPage.style.display = "none";
     if (loginPage) loginPage.style.display = "block";
+
   }
+
 });
 
 // OPEN DASHBOARD
