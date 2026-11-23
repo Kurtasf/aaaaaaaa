@@ -510,15 +510,26 @@ async function enableLoginNotifications() {
 
     console.log("FCM Token:", token);
 
-    messaging.onMessage((payload) => {
-      const title =
-        payload.notification?.title || "Tool Borrowing System";
+   messaging.onMessage(async (payload) => {
+  console.log("FCM FOREGROUND MESSAGE RECEIVED:", payload);
 
-      const body =
-        payload.notification?.body || "New login detected.";
+  const title =
+    payload.notification?.title || "Tool Borrowing System";
 
-      new Notification(title, { body });
+  const body =
+    payload.notification?.body || "New login detected.";
+
+  try {
+    await registration.showNotification(title, {
+      body: body,
+      icon: "/favicon.ico"
     });
+
+    console.log("NOTIFICATION DISPLAYED!");
+  } catch (error) {
+    console.error("SHOW NOTIFICATION ERROR:", error);
+  }
+});
 
   } catch (error) {
     console.error("Notification setup error:", error);
