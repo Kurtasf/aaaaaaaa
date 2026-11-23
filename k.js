@@ -219,13 +219,7 @@ function login() {
 
       message.innerText = "";
 
-      // Send successful login email
-      sendLoginNotification(
-        firebaseUser.email,
-        "SUCCESSFUL",
-        firebaseUser.displayName
-      );
-
+      
       // Save Firestore notification
       return db.collection("login_notifications").add({
         userUid: firebaseUser.uid,
