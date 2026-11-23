@@ -209,18 +209,17 @@ function login() {
         loginDate: new Date().toLocaleString()
       };
 
-      localStorage.setItem("currentUser", JSON.stringify(user));
-
-      // OPEN DASHBOARD
-      openDashboard();
+     localStorage.setItem(
+  "currentUser",
+  JSON.stringify(user)
+);
 
       // SEND EMAIL NOTIFICATION
-      sendLoginNotification(
-        firebaseUser.email,
-        "SUCCESSFUL",
-        firebaseUser.displayName
-      );
-
+     sendLoginNotification(
+  email,
+  "SUCCESSFUL",
+  firebaseUser.displayName
+);
       // SAVE FIRESTORE NOTIFICATION
       return db.collection("loginNotifications").add({
         uid: firebaseUser.uid,
