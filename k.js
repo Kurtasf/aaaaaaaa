@@ -170,6 +170,26 @@ function sendLoginNotification(email, status, userName) {
     });
 }
 
+async function sendLoginNotification(user) {
+  try {
+    const idToken = await user.getIdToken();
+
+    await fetch(
+      "https://tool-borrowing-admin.ietisysteminv.workers.dev/notify-login",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${idToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+      }
+    );
+  } catch (error) {
+    console.error("Login notification error:", error);
+  }
+}
+
 
 // SHOW SIGN UP PAGE
 function showSignup() {
