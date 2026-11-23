@@ -226,28 +226,19 @@ function login() {
       );
 
       // Save login notification separately
-      return db.collection("loginNotifications").add({
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        name: firebaseUser.displayName || "Unknown User",
-        status: "SUCCESSFUL",
-        loginTime: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(function() {
-
-        console.log("LOGIN NOTIFICATION SAVED!");
-
-      }).catch(function(error) {
-
-        console.error(
-          "LOGIN NOTIFICATION SAVE ERROR:",
-          error
-        );
-
-      });
-
-    })
-
-    .catch(function(error) {
+     db.collection("login_notifications").add({
+  userUid: firebaseUser.uid,
+  userEmail: firebaseUser.email,
+  userName: firebaseUser.displayName || "Unknown User",
+  read: false,
+  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+})
+.then(function() {
+  console.log("LOGIN NOTIFICATION SAVED!");
+})
+.catch(function(error) {
+  console.error("FIRESTORE SAVE ERROR:", error);
+});
 
       // Only authentication errors reach this catch
       console.error("Firebase Authentication Error:", error);
