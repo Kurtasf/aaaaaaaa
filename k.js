@@ -190,6 +190,7 @@ function sendLoginNotification(email, status, userName) {
 
 
 
+
 function login() {
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value;
@@ -209,19 +210,64 @@ function login() {
     return;
   }
 
+  auth.signInWithEmailAndPassword(email, password)
+    .then(function(userCredential) {
 
-auth.signInWithEmailAndPassword(email, password)
-  .then(function(userCredential) {
+      let firebaseUser = userCredential.user;
 
-    let firebaseUser = userCredential.user;
+      let user = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        loginDate: new Date().toLocaleString()
+      };
 
-    let user = {
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      loginDate: new Date().toLocaleString()
-    };
+      localStorage.setItem("currentUser", JSON.stringify(user));
 
-    localStorage.setItem("currentUser", JSON.stringify(user));
+      // OPEN DASHBOARD
+      openDashboard();
+
+      // SAVE LOGIN NOTIFICATION TO FIRESTORE
+      db.collection("loginNotifications").add({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: firebaseUser.displayName || "Unknown User",
+        status: "SUCCESSFUL",
+        loginTime: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(function() {
+        console.log("LOGIN NOTIFICATION SAVED!");
+      })
+      .catch(function(error) {
+        console.error("FIRESTORE NOTIFICATION ERROR:", error);
+      });
+
+      // SEND EMAIL NOTIFICATION
+      sendLoginNotification(
+        email,
+        "SUCCESSFUL",
+        firebaseUser.displayName
+      );
+
+    })
+    .catch(function(error) {
+
+      console.error("Firebase Login Error:", error);
+
+      emailjs.send(
+        "service_hd2xf9m",
+        "template_abw4dun",
+        {
+          user_name: email.split("@")[0],
+          user_email: email,
+          login_date: new Date().toLocaleString(),
+          login_status: "FAILED"
+        }
+      );
+
+      message.innerText = "Invalid email or password!";
+
+    });
+}
 
     // SAVE LOGIN NOTIFICATION
     return db.collection("loginNotifications").add({
