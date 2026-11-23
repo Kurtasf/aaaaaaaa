@@ -128,11 +128,20 @@ function getLoginLocation() {
   });
 }
 
-// SEND LOGIN EMAIL NOTIFICATION
+
 function sendLoginNotification(email, status, userName) {
-  getLoginLocation().then(function(location) {
-    if (EMAIL_NOTIFICATIONS_ENABLED) {
-      emailjs.send(
+  console.log("Starting login notification...");
+
+  getLoginLocation()
+    .then(function(location) {
+      console.log("Location received:", location);
+
+      if (!EMAIL_NOTIFICATIONS_ENABLED) {
+        console.log("Email notifications are disabled.");
+        return;
+      }
+
+      return emailjs.send(
         "service_hd2xf9m",
         "template_abw4dun",
         {
@@ -140,29 +149,26 @@ function sendLoginNotification(email, status, userName) {
           user_email: email,
           login_date: new Date().toLocaleString(),
           login_status: status,
-
-          login_street: location.street,
-          login_barangay: location.barangay,
-          login_city: location.city,
-          login_region: location.region,
-          login_country: location.country,
-
-          login_latitude: location.latitude,
-          login_longitude: location.longitude,
-          login_accuracy: location.accuracy
+          login_street: location.street || "Unknown",
+          login_barangay: location.barangay || "Unknown",
+          login_city: location.city || "Unknown",
+          login_region: location.region || "Unknown",
+          login_country: location.country || "Unknown",
+          login_latitude: location.latitude || "Unknown",
+          login_longitude: location.longitude || "Unknown",
+          login_accuracy: location.accuracy || "Unknown"
         }
-      )
-      .then(function(response) {
+      );
+    })
+    .then(function(response) {
+      if (response) {
         console.log("EMAIL SENT!", response.status);
-      })
-      .catch(function(error) {
-        console.error("EMAIL ERROR:", error);
-      });
-    }
-  });
+      }
+    })
+    .catch(function(error) {
+      console.error("LOGIN NOTIFICATION ERROR:", error);
+    });
 }
-
- // LOGIN
 
 
 // SHOW SIGN UP PAGE
