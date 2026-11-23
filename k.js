@@ -422,7 +422,7 @@ function openDashboard() {
 
   notification.innerText =
     "A login was detected for " + user.email +
-    " at " + (user.loginDate || "Unknown");
+    " at " + (user.loginDate || "POGI");
 
   adminPanel.style.display = isAdmin ? "block" : "none";
   addToolSection.style.display = isAdmin ? "block" : "none";
