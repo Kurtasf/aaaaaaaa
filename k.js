@@ -510,6 +510,21 @@ async function enableLoginNotifications() {
 
     console.log("FCM Token:", token);
 
+    try {
+  await registration.showNotification(
+    "LOCAL TEST NOTIFICATION",
+    {
+      body: "Your admin phone can display notifications."
+    }
+  );
+
+  console.log("LOCAL TEST NOTIFICATION SENT!");
+
+} catch (error) {
+  console.error("LOCAL TEST FAILED:", error);
+  alert("Local notification failed: " + error.message);
+}
+
   messaging.onMessage(async (payload) => {
   console.log("FCM FOREGROUND MESSAGE RECEIVED:", payload);
 
