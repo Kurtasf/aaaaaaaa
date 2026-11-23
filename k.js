@@ -1,4 +1,6 @@
+
 const EMAIL_NOTIFICATIONS_ENABLED = true;
+
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
   apiKey: "AIzaSyDUnnPmQuaxNsLMCsojkuR97elIlx8gu78",
@@ -21,13 +23,9 @@ emailjs.init({
   publicKey: "9gKHyE7RdKUjDC-SW"
 });
 
-// GET APPROXIMATE LOGIN LOCATION
-          
-// GET PRECISE DEVICE LOCATION + ADDRESS
-
+// GET DEVICE LOCATION
 function getLoginLocation() {
   return new Promise(function(resolve) {
-
     if (!navigator.geolocation) {
       resolve({
         street: "Unavailable",
@@ -44,7 +42,6 @@ function getLoginLocation() {
 
     navigator.geolocation.getCurrentPosition(
       function(position) {
-
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
 
@@ -59,7 +56,6 @@ function getLoginLocation() {
           return response.json();
         })
         .then(function(data) {
-
           let address = data.address || {};
 
           resolve({
@@ -91,10 +87,8 @@ function getLoginLocation() {
             longitude: longitude,
             accuracy: Math.round(position.coords.accuracy)
           });
-
         })
         .catch(function(error) {
-
           console.error("ADDRESS ERROR:", error);
 
           resolve({
@@ -107,13 +101,10 @@ function getLoginLocation() {
             longitude: longitude,
             accuracy: Math.round(position.coords.accuracy)
           });
-
         });
-
       },
 
       function(error) {
-
         console.error("GPS ERROR:", error.message);
 
         resolve({
@@ -126,7 +117,6 @@ function getLoginLocation() {
           longitude: "Unavailable",
           accuracy: "Unavailable"
         });
-
       },
 
       {
@@ -138,15 +128,10 @@ function getLoginLocation() {
   });
 }
 
-
-// SEND LOGIN NOTIFICATION
-
+// SEND LOGIN EMAIL NOTIFICATION
 function sendLoginNotification(email, status, userName) {
-
   getLoginLocation().then(function(location) {
-
     if (EMAIL_NOTIFICATIONS_ENABLED) {
-
       emailjs.send(
         "service_hd2xf9m",
         "template_abw4dun",
@@ -173,24 +158,11 @@ function sendLoginNotification(email, status, userName) {
       .catch(function(error) {
         console.error("EMAIL ERROR:", error);
       });
-
-    } else {
-      console.log("EMAIL NOTIFICATIONS DISABLED");
     }
-
   });
-
 }
 
-
 // LOGIN
-
-
-
-
-
-
-
 function login() {
   let email = document.getElementById("email").value.trim();
   let password = document.getElementById("password").value;
@@ -212,7 +184,6 @@ function login() {
 
   auth.signInWithEmailAndPassword(email, password)
     .then(function(userCredential) {
-
       let firebaseUser = userCredential.user;
 
       let user = {
@@ -223,35 +194,37 @@ function login() {
 
       localStorage.setItem("currentUser", JSON.stringify(user));
 
+      // SEND EMAIL NOTIFICATION
+      sendLoginNotification(
+        firebaseUser.email,
+        "SUCCESSFUL",
+        firebaseUser.displayName
+      );
+
       // OPEN DASHBOARD
       openDashboard();
 
       // SAVE LOGIN NOTIFICATION TO FIRESTORE
-      db.collection("loginNotifications").add({
+      return db.collection("loginNotifications").add({
         uid: firebaseUser.uid,
         email: firebaseUser.email,
         name: firebaseUser.displayName || "Unknown User",
         status: "SUCCESSFUL",
         loginTime: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(function() {
-        console.log("LOGIN NOTIFICATION SAVED!");
-      })
-      .catch(function(error) {
-        console.error("FIRESTORE NOTIFICATION ERROR:", error);
       });
-
-      // SEND EMAIL NOTIFICATION
-      sendLoginNotification(
-        email,
-        "SUCCESSFUL",
-        firebaseUser.displayName
-      );
-
+    })
+    .then(function() {
+      console.log("LOGIN NOTIFICATION SAVED!");
     })
     .catch(function(error) {
+      console.error("Firebase Login / Firestore Error:", error);
 
-      console.error("Firebase Login Error:", error);
+      if (auth.currentUser) {
+        console.error(
+          "User is signed in, but Firestore notification was not saved."
+        );
+        return;
+      }
 
       emailjs.send(
         "service_hd2xf9m",
@@ -265,79 +238,10 @@ function login() {
       );
 
       message.innerText = "Invalid email or password!";
-
     });
 }
 
-    // SAVE LOGIN NOTIFICATION
-    return db.collection("loginNotifications").add({
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      name: firebaseUser.displayName || "Unknown User",
-      status: "SUCCESSFUL",
-      loginTime: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(function() {
-
-      console.log("LOGIN NOTIFICATION SAVED!");
-
-      openDashboard();
-
-      sendLoginNotification(
-        email,
-        "SUCCESSFUL",
-        firebaseUser.displayName
-      );
-
-    });
-
-  })
-
-    // SAVE LOGIN NOTIFICATION TO FIRESTORE
-db.collection("loginNotifications").add({
-  uid: firebaseUser.uid,
-  email: firebaseUser.email,
-  name: firebaseUser.displayName || "Unknown User",
-  status: "SUCCESSFUL",
-  loginTime: firebase.firestore.FieldValue.serverTimestamp()
-})
-.then(function() {
-  console.log("LOGIN NOTIFICATION SAVED!");
-})
-.catch(function(error) {
-  console.error("LOGIN NOTIFICATION ERROR:", error);
-});
-
-// OPEN DASHBOARD
-openDashboard();
-
-sendLoginNotification(
-  email,
-  "SUCCESSFUL",
-  firebaseUser.displayName
-);
-
-  })
-  .catch(function(error) {
-
-    console.error("Firebase Login Error:", error);
-
-    emailjs.send(
-      "service_hd2xf9m",
-      "template_abw4dun",
-      {
-        user_name: email.split("@")[0],
-        user_email: email,
-        login_date: new Date().toLocaleString(),
-        login_status: "FAILED"
-      }
-    );
-
-    message.innerText = "Invalid email or password!";
-
-  });
-
-
-}// SHOW SIGN UP PAGE
+// SHOW SIGN UP PAGE
 function showSignup() {
   document.getElementById("loginPage").style.display = "none";
   document.getElementById("signupPage").style.display = "block";
@@ -379,11 +283,9 @@ function signup() {
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(function(userCredential) {
-
       return userCredential.user.updateProfile({
         displayName: name
       });
-
     })
     .then(function() {
       return auth.signOut();
@@ -406,12 +308,8 @@ function signup() {
 }
 
 // CHECK FIREBASE LOGIN SESSION
-
-
 auth.onAuthStateChanged(function(firebaseUser) {
-
   if (firebaseUser) {
-
     console.log("Firebase authenticated:", firebaseUser.uid);
 
     const savedUser = localStorage.getItem("currentUser");
@@ -421,11 +319,8 @@ auth.onAuthStateChanged(function(firebaseUser) {
     } else {
       console.warn("Firebase user exists but currentUser is missing.");
     }
-
   } else {
-
-    // Stop Firestore real-time listener
-    if (stopToolsSync) {
+    if (typeof stopToolsSync === "function") {
       stopToolsSync();
       stopToolsSync = null;
     }
@@ -437,15 +332,11 @@ auth.onAuthStateChanged(function(firebaseUser) {
     if (dashboard) dashboard.style.display = "none";
     if (signupPage) signupPage.style.display = "none";
     if (loginPage) loginPage.style.display = "block";
-
   }
-
 });
 
-
-
+// OPEN DASHBOARD
 function openDashboard() {
-
   console.log("OPEN DASHBOARD CALLED");
 
   const ids = [
@@ -476,9 +367,11 @@ function openDashboard() {
   const adminPanel = document.getElementById("adminPanel");
   const addToolSection = document.getElementById("addToolSection");
 
-  if (!loginPage || !signupPage || !dashboard ||
-      !welcome || !notification || !adminPanel ||
-      !addToolSection) {
+  if (
+    !loginPage || !signupPage || !dashboard ||
+    !welcome || !notification || !adminPanel ||
+    !addToolSection
+  ) {
     console.error("STOPPED: Missing HTML element.");
     return;
   }
@@ -493,8 +386,9 @@ function openDashboard() {
   const user = JSON.parse(savedUser);
   const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
 
-  const isAdmin = auth.currentUser &&
-                  auth.currentUser.uid === adminUID;
+  const isAdmin =
+    auth.currentUser &&
+    auth.currentUser.uid === adminUID;
 
   loginPage.style.display = "none";
   signupPage.style.display = "none";
@@ -509,7 +403,7 @@ function openDashboard() {
   adminPanel.style.display = isAdmin ? "block" : "none";
   addToolSection.style.display = isAdmin ? "block" : "none";
 
-  if (!stopToolsSync) {
+  if (typeof stopToolsSync === "undefined" || !stopToolsSync) {
     startToolsSync();
   }
 
