@@ -240,8 +240,8 @@ auth.signInWithEmailAndPassword(email, password)
     console.error("Firebase Login Error:", error);
 
     emailjs.send(
-      "service_vpjxt1a",
-      "template_a4ivrwi",
+      "service_hd2xf9m",
+      "template_abw4dun",
       {
         user_name: email.split("@")[0],
         user_email: email,
