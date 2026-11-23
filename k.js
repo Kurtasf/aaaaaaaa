@@ -466,6 +466,7 @@ function openDashboard() {
 }
 
 
+
 async function enableLoginNotifications() {
   try {
     const permission = await Notification.requestPermission();
@@ -508,52 +509,42 @@ async function enableLoginNotifications() {
 
     alert("Phone connected! Login notifications enabled.");
 
-    console.log("FCM Token:", token);
+    console.log("FCM TOKEN REGISTERED!");
 
-    try {
-  await registration.showNotification(
-    "LOCAL TEST NOTIFICATION",
-    {
-      body: "Your admin phone can display notifications."
-    }
-  );
+    // Listen for incoming foreground messages
+    messaging.onMessage(async (payload) => {
+      console.log("FCM FOREGROUND MESSAGE RECEIVED:", payload);
 
-  console.log("LOCAL TEST NOTIFICATION SENT!");
+      alert("FCM MESSAGE RECEIVED ON ADMIN PHONE!");
 
-} catch (error) {
-  console.error("LOCAL TEST FAILED:", error);
-  alert("Local notification failed: " + error.message);
-}
+      const title =
+        payload.notification?.title || "Tool Borrowing System";
 
-  messaging.onMessage(async (payload) => {
-  console.log("FCM FOREGROUND MESSAGE RECEIVED:", payload);
+      const body =
+        payload.notification?.body || "New login detected.";
 
-  alert("FCM MESSAGE RECEIVED ON ADMIN PHONE!");
+      try {
+        await registration.showNotification(title, {
+          body: body,
+          icon: "/favicon.ico"
+        });
 
-  const title =
-    payload.notification?.title || "Tool Borrowing System";
+        console.log("NOTIFICATION DISPLAYED!");
 
-  const body =
-    payload.notification?.body || "New login detected.";
-
-  try {
-    await registration.showNotification(title, {
-      body: body,
-      icon: "/favicon.ico"
+      } catch (error) {
+        console.error("SHOW NOTIFICATION ERROR:", error);
+      }
     });
 
-    console.log("NOTIFICATION DISPLAYED!");
+    // Local notification test
+    await registration.showNotification(
+      "LOCAL TEST NOTIFICATION",
+      {
+        body: "Your admin phone can display notifications."
+      }
+    );
 
-  } catch (error) {
-    console.error("SHOW NOTIFICATION ERROR:", error);
-  }
-});
-
-    console.log("NOTIFICATION DISPLAYED!");
-  } catch (error) {
-    console.error("SHOW NOTIFICATION ERROR:", error);
-  }
-});
+    console.log("LOCAL TEST NOTIFICATION SENT!");
 
   } catch (error) {
     console.error("Notification setup error:", error);
