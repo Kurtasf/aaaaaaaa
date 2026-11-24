@@ -571,7 +571,7 @@ async function sendLoginSmsOtp(rawPhone) {
 
   const cleanPhone = String(rawPhone || "").trim();
   if (!/^09\d{9}$/.test(cleanPhone)) {
-    msgEl.innerText = "Walang valid PH mobile number (09XXXXXXXXX) sa account na ito.";
+    msgEl.innerText = "Walang valid PH mobile number (09850265121) sa account na ito.";
     return;
   }
 
