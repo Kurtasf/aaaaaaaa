@@ -10,13 +10,7 @@
   <link rel="icon" type="image/png" href="ietis.png">
 
 </head>
-<body>
-  <div class="lightning-background">
-  <span class="lightning bolt1"></span>
-  <span class="lightning bolt2"></span>
-  <span class="lightning bolt3"></span>
-</div>
-  
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tool Borrowing System</title>
@@ -373,81 +367,7 @@ tr:hover {
 }
 
   
-/* WHITE ELECTRIC BACKGROUND */
 
-
-/* WHITE BACKGROUND */
-body {
-  background: white !important;
-}
-
-/* LIGHTNING LAYER */
-.lightning-background {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background: transparent;
-}
-
-/* LIGHTNING BOLTS */
-.lightning {
-  position: absolute;
-  top: 0;
-  height: 100vh;
-  width: 120px;
-  background: #168bff;
-  opacity: 0;
-  filter: drop-shadow(0 0 12px #00aaff);
-  clip-path: polygon(
-    50% 0,
-    70% 0,
-    45% 40%,
-    75% 40%,
-    15% 100%,
-    35% 52%,
-    10% 52%
-  );
-  animation: lightningFlash 2.5s infinite;
-}
-
-.bolt1 {
-  left: 15%;
-}
-
-.bolt2 {
-  left: 50%;
-  animation-delay: 0.8s;
-}
-
-.bolt3 {
-  left: 78%;
-  animation-delay: 1.6s;
-}
-
-@keyframes lightningFlash {
-  0%, 15%, 30%, 100% {
-    opacity: 0;
-  }
-  16% {
-    opacity: 1;
-  }
-  18% {
-    opacity: 0.2;
-  }
-  20% {
-    opacity: 0.9;
-  }
-  23% {
-    opacity: 0;
-  }
-}
-
-/* Keep dashboard content above lightning */
-body > *:not(.lightning-background) {
-  position: relative;
-  z-index: 1;
-}
 
 </style>
 
