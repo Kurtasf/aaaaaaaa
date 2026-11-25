@@ -1105,13 +1105,21 @@ if (!response.ok) {
         <td>${safe(user.displayName || "-")}</td>
         <td>${user.emailVerified ? "Yes" : "No"}</td>
         <td>
-          ${user.uid === "3lzOvXcSwveDgD0cEP9T0i0lvgs2"
-            ? "ADMIN"
-            : `<button onclick="deleteAdminAccount('${user.uid}')"
-                 style="background:#dc2626;color:white;">
-                 DELETE
-               </button>`
-          }
+         
+${user.uid === "3lzOvXcSwveDgD0cEP9T0i0lvgs2"
+  ? "ADMIN"
+  : `
+    <button onclick="adminResetPassword('${user.uid}')">
+      RESET PASSWORD
+    </button>
+
+    <button onclick="deleteAdminAccount('${user.uid}')"
+      style="background:#dc2626;color:white;">
+      DELETE
+    </button>
+  `
+}
+
         </td>
       </tr>
     `).join("");
