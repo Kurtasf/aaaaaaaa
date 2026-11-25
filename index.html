@@ -393,8 +393,44 @@ tr:hover {
 
   <input id="search" placeholder="Search tools..." oninput="showTools()">
 
-  <button onclick="logout()">LOGOUT</button>
+  <button onclick="toggleMyPasswordForm()">
+  CHANGE PASSWORD
+</button>
+
+<button onclick="logout()">LOGOUT</button>
 </nav>
+
+  <div id="myPasswordForm" class="section" style="display:none;">
+  <h2>🔐 CHANGE MY PASSWORD</h2>
+
+  <input
+    type="password"
+    id="currentPassword"
+    placeholder="Current Password"
+  >
+
+  <input
+    type="password"
+    id="newPassword"
+    placeholder="New Password"
+  >
+
+  <input
+    type="password"
+    id="confirmNewPassword"
+    placeholder="Confirm New Password"
+  >
+
+  <button onclick="changeMyPassword()">
+    CHANGE PASSWORD
+  </button>
+
+  <button onclick="toggleMyPasswordForm()">
+    CANCEL
+  </button>
+
+  <p id="passwordChangeMessage"></p>
+</div>
 
 <div class="container">
 
