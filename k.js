@@ -659,17 +659,25 @@ function toggleMyPasswordForm() {
 }
 
 
+
 async function adminResetPassword(uid) {
+
   const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
 
+  // Check admin access
   if (!auth.currentUser ||
       auth.currentUser.uid !== adminUID) {
     alert("Access denied! Admin only.");
     return;
   }
 
+  if (!uid || uid === adminUID) {
+    alert("Invalid account selected!");
+    return;
+  }
+
   const newPassword = prompt(
-    "Enter the new temporary password for this user:"
+    "Enter NEW PASSWORD for this user:"
   );
 
   if (!newPassword) return;
@@ -678,13 +686,25 @@ async function adminResetPassword(uid) {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
 
   if (!strongPassword.test(newPassword)) {
-    alert("Password must have 8 characters, uppercase, lowercase, number, and special character!");
+    alert(
+      "Password must contain:\n" +
+      "- Minimum 8 characters\n" +
+      "- Uppercase letter\n" +
+      "- Lowercase letter\n" +
+      "- Number\n" +
+      "- Special character (@#$!*)"
+    );
     return;
   }
 
-  if (!confirm("Reset this user's password?")) return;
+  const confirmReset = confirm(
+    "Are you sure you want to reset this user's password?"
+  );
+
+  if (!confirmReset) return;
 
   try {
+
     const token = await auth.currentUser.getIdToken();
 
     const response = await fetch(
@@ -705,18 +725,29 @@ async function adminResetPassword(uid) {
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.error || "Password reset failed.");
+      throw new Error(
+        result.error || "Password reset failed."
+      );
     }
 
-    alert("User password successfully reset!");
+    alert(
+      "SUCCESS!\n\n" +
+      "User password has been successfully reset."
+    );
 
   } catch (error) {
-    console.error("Admin reset password error:", error);
-    alert(error.message);
+
+    console.error("Admin Reset Password Error:", error);
+
+    alert(
+      "FAILED TO RESET PASSWORD!\n" +
+      error.message
+    );
   }
 }
 
 window.adminResetPassword = adminResetPassword;
+
 
 
 function toggleMyPasswordForm() {
