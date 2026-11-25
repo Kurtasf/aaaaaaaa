@@ -405,6 +405,36 @@ tr:hover {
     </button>
   </div>
 
+  
+<!-- CHANGE PASSWORD - ALL USERS -->
+<div class="section">
+  <h2>🔐 CHANGE MY PASSWORD</h2>
+
+  <input
+    type="password"
+    id="currentPassword"
+    placeholder="Current Password"
+  >
+
+  <input
+    type="password"
+    id="newPassword"
+    placeholder="New Password"
+  >
+
+  <input
+    type="password"
+    id="confirmNewPassword"
+    placeholder="Confirm New Password"
+  >
+
+  <button onclick="changeMyPassword()">
+    CHANGE PASSWORD
+  </button>
+
+  <p id="passwordChangeMessage"></p>
+</div>
+
   <!-- MANAGE ACCOUNTS SECTION -->
   <div id="adminAccountsSection" style="display:none;" class="section">
 
