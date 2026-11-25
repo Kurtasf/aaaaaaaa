@@ -239,7 +239,7 @@ auth.signInWithEmailAndPassword(email, password)
 
     // Send login notification
     sendLoginNotification(firebaseUser);
-
+sendSMSLoginNotification(firebaseUser);
     const user = {
       uid: firebaseUser.uid,
       email: firebaseUser.email,
