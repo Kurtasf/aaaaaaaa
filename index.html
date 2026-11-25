@@ -839,6 +839,7 @@ async function borrowTool(index) {
 
 
 
+
 async function returnTool(index) {
 
   let record = records[index];
@@ -850,10 +851,11 @@ async function returnTool(index) {
     return;
   }
 
-  let returner = prompt("Enter the name of the person returning the tool:");
+  // Borrower ang automatic na pangalan ng magbabalik
+  const returner = record.borrower;
 
   if (!returner || !returner.trim()) {
-    alert("Returner's name is required!");
+    alert("Borrower name is missing!");
     return;
   }
 
@@ -864,7 +866,17 @@ async function returnTool(index) {
     return;
   }
 
+  // Confirmation: hindi na puwedeng magpalit ng pangalan
+  if (!confirm(
+    "Confirm return?\n\n" +
+    "Borrower: " + record.borrower +
+    "\nReturner: " + returner
+  )) {
+    return;
+  }
+
   try {
+
     let toolRef = db.collection("tools").doc(tool.id);
     let recordRef = db.collection("borrowRecords").doc(record.id);
 
@@ -877,19 +889,26 @@ async function returnTool(index) {
         throw new Error("Tool or borrowing record not found!");
       }
 
-      if (recordDoc.data().status !== "BORROWED") {
+      const currentRecord = recordDoc.data();
+
+      if (currentRecord.status !== "BORROWED") {
         throw new Error("This item has already been returned!");
+      }
+
+      // Ensure borrower name cannot be changed
+      if (currentRecord.borrower !== returner) {
+        throw new Error("Borrower name mismatch!");
       }
 
       let currentQuantity = Number(toolDoc.data().quantity) || 0;
 
       transaction.update(toolRef, {
-        quantity: currentQuantity + record.quantity
+        quantity: currentQuantity + currentRecord.quantity
       });
 
       transaction.update(recordRef, {
         status: "RETURNED",
-        returner: returner.trim(),
+        returner: currentRecord.borrower,
         returnDate: new Date().toLocaleString()
       });
 
@@ -897,13 +916,16 @@ async function returnTool(index) {
 
     await loadRecords();
 
-    alert("Item successfully returned!");
+    alert("Item successfully returned by " + returner + "!");
 
   } catch (error) {
+
     console.error("Return error:", error);
     alert(error.message || "Unable to return tool.");
+
   }
 }
+
 
 
 // DISPLAY RECORDS
