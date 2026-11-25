@@ -23,24 +23,7 @@ emailjs.init({
   publicKey: "9gKHyE7RdKUjDC-SW"
 });
 
-    // Automatically return to dashboard
-    if (typeof openDashboard === "function") {
-      openDashboard();
-    }
-
-  } else {
-
-    localStorage.removeItem("currentUser");
-
-    document.getElementById("dashboard").style.display = "none";
-    document.getElementById("signupPage").style.display = "none";
-    document.getElementById("loginPage").style.display = "block";
-
-  }
-
-});
-
-
+  
 // GET DEVICE LOCATION
 function getLoginLocation() {
   return new Promise(function(resolve) {
