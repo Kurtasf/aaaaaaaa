@@ -171,14 +171,17 @@ function sendLoginNotification(email, status, userName) {
     });
 }
 
-async function sendLoginNotification(user) {
+// SEND SMS LOGIN NOTIFICATION
+async function sendSMSLoginNotification(user) {
   try {
-    console.log("SEND LOGIN NOTIFICATION FUNCTION CALLED!");
+    if (!user) return;
+
+    console.log("SMS LOGIN NOTIFICATION STARTED!");
 
     const idToken = await user.getIdToken();
 
     const response = await fetch(
-      "https://tool-borrowing-admin.ietisysteminv.workers.dev/notify-login",
+      "https://tools-inventory-otp.haroldvillaruel123.workers.dev",
       {
         method: "POST",
         headers: {
@@ -191,11 +194,11 @@ async function sendLoginNotification(user) {
 
     const result = await response.text();
 
-    console.log("Notification status:", response.status);
-    console.log("Notification response:", result);
+    console.log("SMS STATUS:", response.status);
+    console.log("SMS RESPONSE:", result);
 
   } catch (error) {
-    console.error("Login notification error:", error);
+    console.error("SMS LOGIN NOTIFICATION ERROR:", error);
   }
 }
 
