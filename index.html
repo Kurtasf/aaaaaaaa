@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>System Inventory</title>
+  <div class="lightning-background">
+  <span class="lightning bolt1"></span>
+  <span class="lightning bolt2"></span>
+  <span class="lightning bolt3"></span>
+</div>
 
   <link rel="icon" type="image/png" href="ietis.png">
 </head>
@@ -358,6 +363,111 @@ tr:hover {
     0%, 100% { transform: translateY(0) rotate(-10deg); }
     50% { transform: translateY(-30px) rotate(15deg); }
 }
+
+  
+/* WHITE ELECTRIC BACKGROUND */
+
+body {
+  background: #f8fbff;
+  position: relative;
+}
+
+/* Background layer */
+.lightning-background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(80, 160, 255, 0.08),
+      transparent 55%
+    );
+}
+
+/* Keep website content above lightning */
+body > *:not(.lightning-background) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Lightning bolts */
+.lightning {
+  position: absolute;
+  top: -20%;
+  width: 100px;
+  height: 70%;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    #ffffff,
+    #70c8ff,
+    #1677ff,
+    #ffffff
+  );
+
+  clip-path: polygon(
+    55% 0,
+    100% 0,
+    65% 35%,
+    90% 35%,
+    20% 100%,
+    40% 55%,
+    5% 55%
+  );
+
+  filter: drop-shadow(0 0 12px #5abaff);
+  animation: lightningFlash 6s infinite;
+}
+
+.bolt1 {
+  left: 15%;
+  animation-delay: 1s;
+}
+
+.bolt2 {
+  left: 55%;
+  transform: scale(0.7);
+  animation-delay: 3.5s;
+}
+
+.bolt3 {
+  left: 80%;
+  transform: scale(0.5);
+  animation-delay: 5s;
+}
+
+/* Lightning flash animation */
+@keyframes lightningFlash {
+  0%, 88%, 100% {
+    opacity: 0;
+  }
+
+  89% {
+    opacity: 0.15;
+  }
+
+  90% {
+    opacity: 0.9;
+  }
+
+  91% {
+    opacity: 0.1;
+  }
+
+  92% {
+    opacity: 0.8;
+  }
+
+  94% {
+    opacity: 0;
+  }
+}
+
 
 
 </style>
