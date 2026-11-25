@@ -403,7 +403,15 @@ tr:hover {
     <button onclick="showAdminAccounts()">
       MANAGE ACCOUNTS
     </button>
+
+    <button
+  class="reset-password-btn"
+  onclick="resetUserPassword('${user.uid}', '${user.email}')">
+  RESET PASSWORD
+</button>
   </div>
+
+  
 
   
 <!-- CHANGE PASSWORD - ALL USERS -->
