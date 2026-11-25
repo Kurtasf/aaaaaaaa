@@ -707,6 +707,66 @@ async function adminResetPassword(uid) {
 window.adminResetPassword = adminResetPassword;
 
 
+async function resetUserPassword(uid, email) {
+  const newPassword = prompt(
+    "Enter the new password for " + email
+  );
+
+  if (newPassword === null) return;
+
+  if (!newPassword.trim()) {
+    alert("Please enter a new password.");
+    return;
+  }
+
+  const confirmed = confirm(
+    "Reset password for " + email + "?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      alert("Please login again.");
+      return;
+    }
+
+    const idToken = await currentUser.getIdToken();
+
+    const response = await fetch(
+      "https://tool-borrowing-admin.ietisysteminv.workers.dev/users/" +
+      encodeURIComponent(uid) +
+      "/reset-password",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + idToken,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          newPassword: newPassword
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      alert(result.error || "Password reset failed.");
+      return;
+    }
+
+    alert("Password successfully changed for " + email);
+
+  } catch (error) {
+    console.error("Reset password error:", error);
+    alert("Something went wrong. Check the console.");
+  }
+}
+
+
 
 window.login = login;
 window.showSignup = showSignup;
