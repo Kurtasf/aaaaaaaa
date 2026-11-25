@@ -360,34 +360,50 @@ function signup() {
     });
 }
 
-// CHECK FIREBASE LOGIN SESSION
 
-auth.onAuthStateChanged(function(firebaseUser) {
+// CHECK AND RESTORE FIREBASE LOGIN SESSION
+
+auth.onAuthStateChanged(async function(firebaseUser) {
+
+  const dashboard = document.getElementById("dashboard");
+  const signupPage = document.getElementById("signupPage");
+  const loginPage = document.getElementById("loginPage");
 
   if (firebaseUser) {
 
     console.log("Firebase authenticated:", firebaseUser.uid);
 
-    let savedUser = localStorage.getItem("currentUser");
+    let savedUser = {};
 
-    if (!savedUser) {
-
-      savedUser = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        loginDate: new Date().toLocaleString()
-      };
-
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify(savedUser)
+    try {
+      savedUser = JSON.parse(
+        localStorage.getItem("currentUser") || "{}"
       );
-
+    } catch (error) {
+      savedUser = {};
     }
+
+    const user = {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email || "",
+      loginDate: savedUser.loginDate ||
+        new Date().toLocaleString()
+    };
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(user)
+    );
+
+    loginPage.style.display = "none";
+    signupPage.style.display = "none";
+    dashboard.style.display = "block";
 
     openDashboard();
 
   } else {
+
+    console.log("No active Firebase session.");
 
     if (typeof stopToolsSync === "function") {
       stopToolsSync();
@@ -396,17 +412,13 @@ auth.onAuthStateChanged(function(firebaseUser) {
 
     localStorage.removeItem("currentUser");
 
-    const dashboard = document.getElementById("dashboard");
-    const signupPage = document.getElementById("signupPage");
-    const loginPage = document.getElementById("loginPage");
-
-    if (dashboard) dashboard.style.display = "none";
-    if (signupPage) signupPage.style.display = "none";
-    if (loginPage) loginPage.style.display = "block";
-
+    dashboard.style.display = "none";
+    signupPage.style.display = "none";
+    loginPage.style.display = "block";
   }
 
 });
+
 
 // OPEN DASHBOARD
 function openDashboard() {
