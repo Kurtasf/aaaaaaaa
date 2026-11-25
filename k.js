@@ -644,6 +644,65 @@ async function changeMyPassword() {
 
 window.changeMyPassword = changeMyPassword;
 
+async function adminResetPassword(uid) {
+  const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
+
+  if (!auth.currentUser ||
+      auth.currentUser.uid !== adminUID) {
+    alert("Access denied! Admin only.");
+    return;
+  }
+
+  const newPassword = prompt(
+    "Enter the new temporary password for this user:"
+  );
+
+  if (!newPassword) return;
+
+  const strongPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
+
+  if (!strongPassword.test(newPassword)) {
+    alert("Password must have 8 characters, uppercase, lowercase, number, and special character!");
+    return;
+  }
+
+  if (!confirm("Reset this user's password?")) return;
+
+  try {
+    const token = await auth.currentUser.getIdToken();
+
+    const response = await fetch(
+      ADMIN_WORKER_URL + "/users/" +
+      encodeURIComponent(uid) + "/reset-password",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          newPassword: newPassword
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Password reset failed.");
+    }
+
+    alert("User password successfully reset!");
+
+  } catch (error) {
+    console.error("Admin reset password error:", error);
+    alert(error.message);
+  }
+}
+
+window.adminResetPassword = adminResetPassword;
+
 
 
 window.login = login;
