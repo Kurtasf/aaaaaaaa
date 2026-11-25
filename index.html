@@ -752,7 +752,6 @@ async function deleteTool(index) {
 
 // BORROW TOOL
 
-
 async function borrowTool(index) {
 
   let tool = tools[index];
@@ -763,10 +762,22 @@ async function borrowTool(index) {
     return;
   }
 
-  let borrower = prompt("Enter the name of the borrower:");
+  // Ask for the actual borrower's full name
+  let borrower = prompt(
+    "Enter the FULL NAME of the person borrowing this tool:"
+  );
 
-  if (!borrower || !borrower.trim()) {
-    alert("Borrower's name is required!");
+  if (borrower === null) return;
+
+  borrower = borrower.trim().replace(/\s+/g, " ");
+
+  if (!borrower) {
+    alert("Please enter the borrower's full name!");
+    return;
+  }
+
+  if (borrower.length < 3) {
+    alert("Please enter a valid full name!");
     return;
   }
 
@@ -794,7 +805,9 @@ async function borrowTool(index) {
       let currentQuantity = Number(doc.data().quantity) || 0;
 
       if (quantity > currentQuantity) {
-        throw new Error("Not enough stock! Available: " + currentQuantity);
+        throw new Error(
+          "Not enough stock! Available: " + currentQuantity
+        );
       }
 
       transaction.update(toolRef, {
@@ -803,7 +816,7 @@ async function borrowTool(index) {
 
       transaction.set(recordRef, {
         borrowerUid: auth.currentUser.uid,
-        borrower: borrower.trim(),
+        borrower: borrower,
         tool: tool.name,
         quantity: quantity,
         date: new Date().toLocaleString(),
@@ -815,15 +828,15 @@ async function borrowTool(index) {
 
     await loadRecords();
 
-    alert("Successfully borrowed!");
+    alert(
+      "Successfully borrowed!\nBorrower: " + borrower
+    );
 
   } catch (error) {
     console.error("Borrow error:", error);
     alert(error.message || "Unable to borrow tool.");
   }
 }
-
-
 // RETURN TOOL
 
 
