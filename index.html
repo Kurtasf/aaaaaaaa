@@ -316,6 +316,58 @@ tr:hover {
   background: #1d4ed8;
 }
 
+/* NEW IETI BACKGROUND */
+.ieti-new-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    background: radial-gradient(
+        circle at center,
+        #123c55,
+        #071321 65%,
+        #020914
+    );
+}
+
+.ieti-new-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("ietis.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: min(420px, 75vw);
+    opacity: 0.13;
+    filter: drop-shadow(0 0 25px #00d9ff);
+    animation: ietiNewGlow 3s infinite alternate;
+}
+
+.ieti-floating-tool {
+    position: absolute;
+    font-size: 38px;
+    opacity: 0.25;
+    animation: ietiNewFloat 8s infinite ease-in-out;
+}
+
+.ieti-tool-1 { top: 10%; left: 8%; }
+.ieti-tool-2 { top: 25%; right: 12%; animation-delay: 1s; }
+.ieti-tool-3 { top: 65%; left: 12%; animation-delay: 2s; }
+.ieti-tool-4 { top: 80%; right: 15%; animation-delay: 3s; }
+.ieti-tool-5 { top: 45%; left: 48%; animation-delay: 1.5s; }
+.ieti-tool-6 { top: 15%; left: 55%; animation-delay: 2.5s; }
+
+@keyframes ietiNewGlow {
+    from { opacity: 0.08; }
+    to { opacity: 0.20; }
+}
+
+@keyframes ietiNewFloat {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-30px) rotate(15deg); }
+}
+
 
 </style>
 
