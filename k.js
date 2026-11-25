@@ -566,6 +566,84 @@ async function enableLoginNotifications() {
 }
 
 
+async function changeMyPassword() {
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Please login first!");
+    return;
+  }
+
+  const currentPassword =
+    document.getElementById("currentPassword").value;
+
+  const newPassword =
+    document.getElementById("newPassword").value;
+
+  const confirmPassword =
+    document.getElementById("confirmNewPassword").value;
+
+  const message =
+    document.getElementById("passwordChangeMessage");
+
+  const strongPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!*])[A-Za-z\d@#$!*]{8,}$/;
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    message.innerText = "Please complete all fields!";
+    return;
+  }
+
+  if (!strongPassword.test(newPassword)) {
+    message.innerText = "Password must contain 8 characters, uppercase, lowercase, number, and special character!";
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    message.innerText = "Passwords do not match!";
+    return;
+  }
+
+  if (currentPassword === newPassword) {
+    message.innerText = "New password must be different!";
+    return;
+  }
+
+  try {
+    const credential =
+      firebase.auth.EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+
+    await user.reauthenticateWithCredential(credential);
+
+    await user.updatePassword(newPassword);
+
+    message.style.color = "green";
+    message.innerText = "Password successfully changed!";
+
+    document.getElementById("currentPassword").value = "";
+    document.getElementById("newPassword").value = "";
+    document.getElementById("confirmNewPassword").value = "";
+
+  } catch (error) {
+    console.error("Change password error:", error);
+
+    message.style.color = "red";
+
+    message.innerText =
+      error.code === "auth/wrong-password" ||
+      error.code === "auth/invalid-credential"
+        ? "Incorrect current password!"
+        : error.code === "auth/requires-recent-login"
+        ? "Please log in again before changing your password."
+        : error.message;
+  }
+}
+
+window.changeMyPassword = changeMyPassword;
+
 
 
 window.login = login;
