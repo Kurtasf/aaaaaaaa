@@ -647,6 +647,18 @@ async function changeMyPassword() {
 
 window.changeMyPassword = changeMyPassword;
 
+
+function toggleMyPasswordForm() {
+  const form = document.getElementById("myPasswordForm");
+
+  if (form.style.display === "none") {
+    form.style.display = "block";
+  } else {
+    form.style.display = "none";
+  }
+}
+
+
 async function adminResetPassword(uid) {
   const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
 
