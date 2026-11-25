@@ -752,32 +752,25 @@ async function deleteTool(index) {
 
 // BORROW TOOL
 
+// BORROW TOOL
+
 async function borrowTool(index) {
 
   let tool = tools[index];
   if (!tool) return;
 
-  if (!auth.currentUser) {
+  let user = auth.currentUser;
+
+  if (!user) {
     alert("Please login first!");
     return;
   }
 
-  // Ask for the actual borrower's full name
-  let borrower = prompt(
-    "Enter the FULL NAME of the person borrowing this tool:"
-  );
-
-  if (borrower === null) return;
-
-  borrower = borrower.trim().replace(/\s+/g, " ");
+  // Automatically get logged-in Gmail
+  let borrower = user.email;
 
   if (!borrower) {
-    alert("Please enter the borrower's full name!");
-    return;
-  }
-
-  if (borrower.length < 3) {
-    alert("Please enter a valid full name!");
+    alert("Unable to get your Gmail address!");
     return;
   }
 
@@ -791,6 +784,7 @@ async function borrowTool(index) {
   }
 
   try {
+
     let toolRef = db.collection("tools").doc(tool.id);
     let recordRef = db.collection("borrowRecords").doc();
 
@@ -815,7 +809,7 @@ async function borrowTool(index) {
       });
 
       transaction.set(recordRef, {
-        borrowerUid: auth.currentUser.uid,
+        borrowerUid: user.uid,
         borrower: borrower,
         tool: tool.name,
         quantity: quantity,
@@ -833,10 +827,13 @@ async function borrowTool(index) {
     );
 
   } catch (error) {
+
     console.error("Borrow error:", error);
     alert(error.message || "Unable to borrow tool.");
+
   }
 }
+
 // RETURN TOOL
 
 
