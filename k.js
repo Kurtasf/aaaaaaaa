@@ -719,7 +719,15 @@ async function adminResetPassword(uid) {
 window.adminResetPassword = adminResetPassword;
 
 
+function toggleMyPasswordForm() {
+  const form = document.getElementById("myPasswordForm");
 
+  if (form.style.display === "none") {
+    form.style.display = "block";
+  } else {
+    form.style.display = "none";
+  }
+}
 
 
 window.login = login;
