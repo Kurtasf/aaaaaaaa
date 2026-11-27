@@ -423,6 +423,167 @@ tr:hover {
     grid-template-columns: 1fr;
   }
 }
+  
+/* =================================
+   ETII MODERN GREEN + YELLOW THEME
+================================= */
+
+:root {
+  --ieti-green: #28643d;
+  --ieti-dark: #19482d;
+  --ieti-light: #edf5e9;
+  --ieti-yellow: #f2d66d;
+  --ieti-cream: #fffdf3;
+}
+
+/* MAIN BACKGROUND */
+body {
+  background: linear-gradient(135deg, #f4f7ef, #fffdf3) !important;
+  color: #294333;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(
+    110deg,
+    #19482d,
+    #347c49,
+    #528b53
+  ) !important;
+  color: white !important;
+  padding: 24px !important;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 18px rgba(30, 80, 45, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+/* HEADER LIGHT EFFECT */
+header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.17),
+    transparent
+  );
+  animation: headerShine 6s infinite;
+}
+
+@keyframes headerShine {
+  to { left: 150%; }
+}
+
+/* SECTIONS */
+.section {
+  background: rgba(255,255,255,0.96) !important;
+  border: 1px solid #dcebd8 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 5px 18px rgba(38, 100, 61, 0.07);
+  transition: box-shadow .3s ease;
+  animation: fadeIn .7s ease both;
+}
+
+/* PRODUCT CARDS */
+.card {
+  background: white !important;
+  border: 1px solid #e0eadb !important;
+  border-top: 5px solid #438d50 !important;
+  border-radius: 17px !important;
+  box-shadow: 0 5px 14px rgba(40, 80, 40, 0.09);
+  transition: transform .35s ease,
+              box-shadow .35s ease,
+              border-color .35s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-9px);
+  border-top-color: #e4c34f !important;
+  box-shadow: 0 13px 25px rgba(40, 100, 61, 0.16);
+}
+
+/* PRODUCT IMAGE */
+.card img {
+  transition: transform .45s ease;
+}
+
+.card:hover img {
+  transform: scale(1.07);
+}
+
+/* BUTTONS */
+button {
+  transition: all .3s ease !important;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(40, 100, 61, .18);
+}
+
+/* YELLOW-GREEN BUTTON EFFECT */
+button:active {
+  transform: scale(.96);
+}
+
+/* SEARCH AND INPUT */
+input {
+  border: 1px solid #d3e4cd !important;
+  border-radius: 10px !important;
+  transition: border-color .3s, box-shadow .3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4b965a !important;
+  box-shadow: 0 0 0 4px rgba(75,150,90,.12);
+}
+
+/* NOTIFICATION */
+#notification {
+  background: #f5f7df !important;
+  border-left: 5px solid #72a34c !important;
+  border-radius: 12px !important;
+}
+
+/* TABLE */
+th {
+  background: #28643d !important;
+  color: white !important;
+}
+
+tr:hover {
+  background: #f5f7e7 !important;
+}
+
+/* FADE ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 </style>
 
 
