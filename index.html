@@ -1521,11 +1521,113 @@ async function clearReturnedHistory() {
 
 }
 
+
 function showRecords() {
+
+  const nameInput =
+    document.getElementById("borrowHistoryName");
+
+  const dateInput =
+    document.getElementById("borrowHistoryDate");
+
+  const timeInput =
+    document.getElementById("borrowHistoryTime");
+
+  const searchName =
+    nameInput ? nameInput.value.trim().toLowerCase() : "";
+
+  const searchDate =
+    dateInput ? dateInput.value : "";
+
+  const searchTime =
+    timeInput ? timeInput.value : "";
 
   let output = "";
 
-  records.forEach((record, index) => {
+  // FILTER BORROWING RECORDS
+  const filteredRecords = records
+    .map((record, index) => ({
+      record: record,
+      originalIndex: index
+    }))
+    .filter(item => {
+
+      const record = item.record;
+
+      // SEARCH BORROWER NAME
+      const borrowerName =
+        String(record.borrower || "").toLowerCase();
+
+      if (
+        searchName &&
+        !borrowerName.includes(searchName)
+      ) {
+        return false;
+      }
+
+      // SEARCH DATE AND TIME
+      if (searchDate || searchTime) {
+
+        const recordDate =
+          String(record.date || "");
+
+        const parsedDate = new Date(recordDate);
+
+        if (isNaN(parsedDate.getTime())) {
+          return false;
+        }
+
+        // DATE FILTER
+        if (searchDate) {
+
+          const year = parsedDate.getFullYear();
+          const month = String(
+            parsedDate.getMonth() + 1
+          ).padStart(2, "0");
+
+          const day = String(
+            parsedDate.getDate()
+          ).padStart(2, "0");
+
+          const formattedDate =
+            `${year}-${month}-${day}`;
+
+          if (formattedDate !== searchDate) {
+            return false;
+          }
+        }
+
+        // TIME FILTER
+        if (searchTime) {
+
+          const hours = String(
+            parsedDate.getHours()
+          ).padStart(2, "0");
+
+          const minutes = String(
+            parsedDate.getMinutes()
+          ).padStart(2, "0");
+
+          const formattedTime =
+            `${hours}:${minutes}`;
+
+          if (formattedTime !== searchTime) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    });
+
+  // DISPLAY FILTERED RECORDS
+  filteredRecords.forEach(item => {
+
+    const record = item.record;
+
+    // IMPORTANT:
+    // Use original index so RETURN still works
+    const index = item.originalIndex;
 
     output += `
       <tr>
@@ -1582,12 +1684,31 @@ function showRecords() {
   });
 
   document.getElementById("records").innerHTML =
-    output || "<tr><td colspan='8'>No records yet.</td></tr>";
+    output ||
+    "<tr><td colspan='8'>No matching records found.</td></tr>";
 
 }
 
 
-  
+// SEARCH BUTTON
+function searchBorrowHistory() {
+  showRecords();
+}
+
+
+// CLEAR SEARCH BUTTON
+function clearBorrowHistorySearch() {
+
+  document.getElementById("borrowHistoryName").value = "";
+
+  document.getElementById("borrowHistoryDate").value = "";
+
+  document.getElementById("borrowHistoryTime").value = "";
+
+  showRecords();
+
+}
+
 // ADD NEW TOOL
 
 
