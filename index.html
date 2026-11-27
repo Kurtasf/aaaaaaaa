@@ -1296,26 +1296,6 @@ async function returnTool(index) {
 // DISPLAY RECORDS
 
 async function showMyHistory() {
-
-  if (!auth.currentUser) {
-    alert("Please login first!");
-    return;
-  }
-
-  const historySection =
-    document.getElementById("borrowingHistorySection");
-
-  historySection.style.display = "block";
-
-  await loadRecords();
-
-  historySection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}
-async function showMyHistory() {
-
   if (!auth.currentUser) {
     alert("Please login first!");
     return;
@@ -1335,26 +1315,8 @@ async function showMyHistory() {
 }
 
 window.showMyHistory = showMyHistory;
+
 async function showAdminHistory() {
-async function showMyHistory() {
-
-  if (!auth.currentUser) {
-    alert("Please login first!");
-    return;
-  }
-
-  const historySection =
-    document.getElementById("borrowingHistorySection");
-
-  historySection.style.display = "block";
-
-  await loadRecords();
-
-  historySection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}
   const adminUID = "3lzOvXcSwveDgD0cEP9T0i0lvgs2";
 
   if (!auth.currentUser || auth.currentUser.uid !== adminUID) {
@@ -1362,7 +1324,8 @@ async function showMyHistory() {
     return;
   }
 
-  const historySection = document.getElementById("borrowingHistorySection");
+  const historySection =
+    document.getElementById("borrowingHistorySection");
 
   historySection.style.display = "block";
 
