@@ -430,15 +430,26 @@ tr:hover {
 #dashboard {
   position: relative;
   isolation: isolate;
+  overflow: hidden;
 }
 
-/* EFFECT LAYER */
+/* LIGHTNING LAYER */
 #dashboard .dashboard-lightning {
   position: absolute;
   inset: 0;
-  z-index: 10;
+  z-index: 2;
   pointer-events: none;
   overflow: hidden;
+}
+
+/* BLUE FLASH ACROSS DASHBOARD */
+#dashboard .dashboard-lightning::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(96, 165, 250, 0.22);
+  opacity: 0;
+  animation: dashboardFlash 5s infinite;
 }
 
 /* LIGHTNING BOLT */
@@ -447,9 +458,9 @@ tr:hover {
   top: 0;
   right: 20%;
   width: 100px;
-  height: 300px;
+  height: 350px;
 
-  background: rgba(255, 255, 255, 0.95);
+  background: #e0f2fe;
 
   clip-path: polygon(
     60% 0,
@@ -461,43 +472,75 @@ tr:hover {
     10% 50%
   );
 
-  filter: drop-shadow(0 0 15px #60a5fa);
+  filter:
+    drop-shadow(0 0 10px #38bdf8)
+    drop-shadow(0 0 25px #60a5fa);
 
   opacity: 0;
-  animation: lightningStrike 6s infinite;
+  animation: lightningStrike 5s infinite;
 }
 
-/* SECOND BOLT */
+/* SECOND LIGHTNING */
 #dashboard .bolt-two {
   right: 65%;
   width: 60px;
-  height: 200px;
-  animation-delay: 3s;
+  height: 230px;
+  animation-delay: 2.4s;
 }
 
-/* FLASH */
+/* LIGHTNING FLASH */
 @keyframes lightningStrike {
-  0%, 88%, 100% {
+  0%, 38%, 43%, 75%, 100% {
     opacity: 0;
   }
 
-  89% {
+  40% {
     opacity: 1;
   }
 
-  90% {
-    opacity: 0.15;
+  41% {
+    opacity: 0.2;
   }
 
-  91% {
+  42% {
     opacity: 0.9;
   }
 
-  92% {
+  76% {
+    opacity: 0.8;
+  }
+
+  77% {
     opacity: 0;
   }
 }
 
+/* DASHBOARD BLUE FLASH */
+@keyframes dashboardFlash {
+  0%, 38%, 43%, 75%, 100% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  41% {
+    opacity: 0.2;
+  }
+
+  42% {
+    opacity: 0.8;
+  }
+
+  76% {
+    opacity: 0.5;
+  }
+
+  77% {
+    opacity: 0;
+  }
+}
 
 
 </style>
