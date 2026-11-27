@@ -425,57 +425,79 @@ tr:hover {
 }
   
   
-/* DASHBOARD LIGHTNING BACKGROUND */
+
+/* DASHBOARD LIGHTNING */
 #dashboard {
   position: relative;
-  overflow: hidden;
   isolation: isolate;
 }
 
-/* LIGHTNING FLASH */
-.dashboard-lightning {
+/* EFFECT LAYER */
+#dashboard .dashboard-lightning {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 10;
   pointer-events: none;
   overflow: hidden;
-
-  background:
-    radial-gradient(
-      ellipse at 80% 10%,
-      rgba(100, 180, 255, 0.12),
-      transparent 45%
-    );
-
-  animation: lightningFlash 8s infinite;
 }
 
-/* LIGHTNING ANIMATION */
-@keyframes lightningFlash {
-  0%, 90%, 92%, 96%, 100% {
+/* LIGHTNING BOLT */
+#dashboard .lightning-bolt {
+  position: absolute;
+  top: 0;
+  right: 20%;
+  width: 100px;
+  height: 300px;
+
+  background: rgba(255, 255, 255, 0.95);
+
+  clip-path: polygon(
+    60% 0,
+    100% 0,
+    55% 35%,
+    80% 35%,
+    20% 100%,
+    40% 50%,
+    10% 50%
+  );
+
+  filter: drop-shadow(0 0 15px #60a5fa);
+
+  opacity: 0;
+  animation: lightningStrike 6s infinite;
+}
+
+/* SECOND BOLT */
+#dashboard .bolt-two {
+  right: 65%;
+  width: 60px;
+  height: 200px;
+  animation-delay: 3s;
+}
+
+/* FLASH */
+@keyframes lightningStrike {
+  0%, 88%, 100% {
     opacity: 0;
   }
 
-  91% {
+  89% {
     opacity: 1;
-    background:
-      linear-gradient(
-        120deg,
-        transparent 45%,
-        rgba(255,255,255,0.9) 48%,
-        rgba(100,180,255,0.7) 50%,
-        transparent 53%
-      );
   }
 
-  93% {
-    opacity: 0.2;
+  90% {
+    opacity: 0.15;
   }
 
-  95% {
-    opacity: 0.8;
+  91% {
+    opacity: 0.9;
+  }
+
+  92% {
+    opacity: 0;
   }
 }
+
 
 
 </style>
@@ -546,8 +568,12 @@ tr:hover {
 
 <div id="dashboard" style="display:none;">
 
-<!-- LIGHTNING EFFECT - DASHBOARD ONLY -->
-<div class="dashboard-lightning"></div>
+
+<div class="dashboard-lightning">
+  <div class="lightning-bolt"></div>
+  <div class="lightning-bolt bolt-two"></div>
+</div>
+
 
 <nav>
   <button onclick="showMyHistory()">
