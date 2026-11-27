@@ -16,16 +16,8 @@
 <title>Tool Borrowing System</title>
 
 <style>
-/* =================================
-   IETI MODERN SCHOOL DESIGN
-================================= */
+ 
 
-:root {
-  --ieti-green: #28643d;
-  --ieti-dark: #19482d;
-  --ieti-yellow: #f2d66d;
-  --ieti-cream: #fffdf3;
-}
 
 * {
   box-sizing: border-box;
@@ -34,78 +26,51 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: url("kljhjkh.png") center/cover fixed no-repeat;
-  color: #263b2d;
+  background-image: url("kljhjkh.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #263238;
 }
 
+/* HIDE BACKGROUND IMAGE INSIDE DASHBOARD */
+#dashboard {
+  min-height: 100vh;
+  background: #f4f7f4;
+}
+  
 /* HEADER */
 header {
-  background: linear-gradient(110deg, #19482d, #347c49, #528b53);
+  background: linear-gradient(120deg, #14532d, #2e7d32, #43a047);
   color: white;
   padding: 25px;
   font-size: 25px;
   font-weight: bold;
   letter-spacing: 1px;
-  box-shadow: 0 5px 18px rgba(30,80,45,.18);
-}
-
-/* LOGIN AND SIGNUP */
-#loginPage,
-#signupPage {
-  max-width: 400px;
-  margin: 75px auto;
-  padding: 35px;
-  background: rgba(255,255,255,.96);
-  text-align: center;
-  border-radius: 18px;
-  border: 2px solid #e5d47b;
-  box-shadow: 0 12px 35px rgba(30,80,45,.18);
-}
-
-#loginPage h2,
-#signupPage h2 {
-  color: var(--ieti-green);
-}
-
-#loginPage input,
-#signupPage input {
-  width: 100%;
-}
-
-/* DASHBOARD BACKGROUND */
-#dashboard {
-  min-height: 100vh;
-  background:
-    repeating-linear-gradient(
-      135deg,
-      rgba(255,255,255,.35) 0px,
-      rgba(255,255,255,.35) 45px,
-      transparent 45px,
-      transparent 100px
-    ),
-    linear-gradient(120deg, #fffdf3, #edf5e9, #dcebc9);
-  color: var(--ieti-dark);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
 /* NAVIGATION */
-#dashboard nav {
-  background: linear-gradient(100deg, #19482d, #347c49, #d7b83d);
-  padding: 15px 22px;
+nav {
+  background: rgba(255,255,255,0.95);
+  padding: 15px 20px;
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,.12);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-#dashboard nav strong {
-  color: white !important;
+nav strong {
+  color: #ee4d2d;
+  font-size: 20px;
 }
 
-#dashboard nav input {
+nav input {
   flex: 1;
   min-width: 180px;
 }
@@ -114,15 +79,16 @@ header {
 input {
   padding: 12px;
   margin: 5px 0;
-  border: 1px solid #c8dcc4;
-  border-radius: 9px;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
   outline: none;
-  background: white;
+  background: #ffffff;
+  transition: 0.3s;
 }
 
 input:focus {
-  border-color: #438d50;
-  box-shadow: 0 0 0 3px rgba(67,141,80,.15);
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46,125,50,0.12);
 }
 
 /* BUTTONS */
@@ -130,22 +96,60 @@ button {
   padding: 11px 17px;
   margin: 5px 0;
   border: none;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #347c49, #19482d);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff7043, #ee4d2d);
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: .3s;
-  box-shadow: 0 3px 8px rgba(0,0,0,.12);
+  transition: 0.3s;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.12);
 }
 
 button:hover {
-  transform: translateY(-3px);
-  background: linear-gradient(135deg, #d7b83d, #b89a25);
-  color: #19482d;
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #f4511e, #d84315);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.18);
 }
 
-/* MAIN CONTENT */
+/* LOGIN AND SIGNUP */
+#loginPage,
+#signupPage {
+  max-width: 400px;
+  margin: 75px auto;
+  padding: 35px;
+  background: rgba(255, 255, 255, 0.92);
+  text-align: center;
+  border-radius: 18px;
+  border: 1px solid #dcedc8;
+  box-shadow: 0 12px 35px rgba(46,125,50,0.15);
+}
+
+#loginPage h2,
+#signupPage h2 {
+  color: #2e7d32;
+  font-size: 28px;
+}
+
+#loginPage input,
+#signupPage input {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0;
+}
+
+#loginPage button,
+#signupPage button {
+  width: 100%;
+  background: linear-gradient(135deg, #2e7d32, #43a047);
+  color: white;
+}
+
+#loginPage button:hover,
+#signupPage button:hover {
+  background: #1b5e20;
+}
+
+/* MAIN CONTAINER */
 .container {
   padding: 25px;
   max-width: 1500px;
@@ -153,24 +157,22 @@ button:hover {
 }
 
 #welcome {
-  color: #19482d;
-  font-size: 27px;
-  font-weight: bold;
+  color: #1b5e20;
+  font-size: 26px;
 }
 
 /* SECTIONS */
 .section {
-  background: rgba(255,255,255,.96);
+  background: rgba(255,255,255,0.96);
   margin-top: 22px;
   padding: 23px;
-  border-radius: 17px;
-  border: 1px solid #dcebd8;
-  border-top: 4px solid #d7b83d;
-  box-shadow: 0 5px 18px rgba(38,100,61,.08);
+  border-radius: 15px;
+  border: 1px solid #e0eee0;
+  box-shadow: 0 5px 18px rgba(0,0,0,0.06);
 }
 
 .section h2 {
-  color: #28643d;
+  color: #2e7d32;
   margin-top: 0;
 }
 
@@ -186,17 +188,16 @@ button:hover {
   background: white;
   padding: 15px;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,.08);
-  border: 1px solid #e0eadb;
-  border-top: 5px solid #438d50;
-  transition: .3s;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  border: 1px solid #e8f5e9;
+  border-top: 5px solid #43a047;
+  transition: 0.3s;
   overflow: hidden;
 }
 
 .card:hover {
   transform: translateY(-6px);
-  border-top-color: #d7b83d;
-  box-shadow: 0 10px 25px rgba(46,125,50,.16);
+  box-shadow: 0 10px 25px rgba(46,125,50,0.16);
 }
 
 .card img {
@@ -208,7 +209,7 @@ button:hover {
 }
 
 .card h3 {
-  color: #19482d;
+  color: #1b5e20;
   font-size: 19px;
 }
 
@@ -232,12 +233,12 @@ th, td {
 }
 
 th {
-  background: #28643d;
+  background: #2e7d32;
   color: white;
 }
 
 tr:hover {
-  background: #f5f7e7;
+  background: #f1f8e9;
 }
 
 /* NOTIFICATION */
@@ -247,55 +248,10 @@ tr:hover {
 }
 
 #notification {
-  background: #f5f7df;
+  background: #f1f8e9;
   padding: 15px;
-  border-left: 5px solid #72a34c;
-  border-radius: 10px;
-}
-
-/* BORROWING HISTORY */
-.borrow-history-search {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 18px;
-  margin: 15px 0 20px;
-}
-
-.borrow-history-search h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-.borrow-history-search input {
-  width: 100%;
-  padding: 11px;
-  margin-bottom: 12px;
-}
-
-.borrow-history-date {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.borrow-history-date label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.borrow-history-buttons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-/* CHANGE PASSWORD */
-.change-password-btn {
-  background: #28643d;
-  color: white;
+  border-left: 4px solid #43a047;
+  border-radius: 8px;
 }
 
 /* SMALL TEXT */
@@ -305,7 +261,7 @@ tr:hover {
 }
 
 /* MOBILE RESPONSIVE */
-@media (max-width: 600px) {
+@media(max-width: 600px) {
   header {
     font-size: 19px;
     padding: 18px;
@@ -346,12 +302,202 @@ tr:hover {
     padding: 8px;
   }
 
+  
+.change-password-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.change-password-btn:hover {
+  background: #1d4ed8;
+}
+
+/* NEW IETI BACKGROUND */
+.ieti-new-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    background: radial-gradient(
+        circle at center,
+        #123c55,
+        #071321 65%,
+        #020914
+    );
+}
+
+.ieti-new-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("ietis.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: min(420px, 75vw);
+    opacity: 0.13;
+    filter: drop-shadow(0 0 25px #00d9ff);
+    animation: ietiNewGlow 3s infinite alternate;
+}
+
+.ieti-floating-tool {
+    position: absolute;
+    font-size: 38px;
+    opacity: 0.25;
+    animation: ietiNewFloat 8s infinite ease-in-out;
+}
+
+.ieti-tool-1 { top: 10%; left: 8%; }
+.ieti-tool-2 { top: 25%; right: 12%; animation-delay: 1s; }
+.ieti-tool-3 { top: 65%; left: 12%; animation-delay: 2s; }
+.ieti-tool-4 { top: 80%; right: 15%; animation-delay: 3s; }
+.ieti-tool-5 { top: 45%; left: 48%; animation-delay: 1.5s; }
+.ieti-tool-6 { top: 15%; left: 55%; animation-delay: 2.5s; }
+
+@keyframes ietiNewGlow {
+    from { opacity: 0.08; }
+    to { opacity: 0.20; }
+}
+
+@keyframes ietiNewFloat {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-30px) rotate(15deg); }
+}
+
+
+.borrow-history-search {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 15px 0 20px;
+}
+
+.borrow-history-search h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.borrow-history-search input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.borrow-history-date {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.borrow-history-date label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.borrow-history-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.borrow-history-buttons button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
   .borrow-history-date {
     grid-template-columns: 1fr;
   }
 }
+  
+  
+
+/* DASHBOARD LIGHTNING EFFECT */
+#dashboard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  background: #f4f7f4;
+}
+
+#dashboard .dashboard-lightning {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#dashboard .dashboard-lightning::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(96, 165, 250, 0.18);
+  opacity: 0;
+  animation: dashboardFlash 5s infinite;
+}
+
+#dashboard .lightning-bolt {
+  position: absolute;
+  top: 0;
+  right: 20%;
+  width: 90px;
+  height: 300px;
+  background: linear-gradient(180deg, #ffffff 0%, #bfdbfe 45%, #60a5fa 100%);
+  clip-path: polygon(
+    58% 0, 100% 0, 56% 34%, 82% 34%,
+    18% 100%, 40% 52%, 8% 52%
+  );
+  filter: drop-shadow(0 0 12px #60a5fa)
+          drop-shadow(0 0 25px #93c5fd);
+  opacity: 0;
+  animation: lightningStrike 5s infinite;
+}
+
+#dashboard .bolt-two {
+  right: 65%;
+  width: 58px;
+  height: 210px;
+  animation-delay: 2.5s;
+}
+
+@keyframes lightningStrike {
+  0%, 68%, 100% { opacity: 0; }
+  70% { opacity: 1; }
+  71% { opacity: 0.12; }
+  72% { opacity: 0.85; }
+  73% { opacity: 0; }
+}
+
+@keyframes dashboardFlash {
+  0%, 68%, 100% { opacity: 0; }
+  70% { opacity: 0.65; }
+  71% { opacity: 0.12; }
+  72% { opacity: 0.45; }
+  73% { opacity: 0; }
+}
+
 </style>
+
 </head>
+<body>
+
+
 
 
 <header>
